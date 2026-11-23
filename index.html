@@ -1,0 +1,936 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<link rel="icon" type="image/png" sizes="180x180" href="./icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="./icon.png">
+
+
+
+<meta charset="utf-8">
+
+
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101010">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Assia Collection">
+<meta name="format-detection" content="telephone=no">
+<meta name="application-name" content="Assia Collection">
+<title>Gestion des Abayas</title>
+<style>
+:root{--green:#176b45;--green2:#e8f4ed;--ink:#202923;--muted:#69766e;--line:#dce5de;--bg:#f4f7f4;--danger:#b42318}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif}
+header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.head{max-width:900px;margin:auto;padding:15px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+h1{font-size:20px;margin:0;font-weight:750}.brand{display:flex;align-items:center;gap:11px;min-width:0}.brand-logo{width:48px;height:48px;object-fit:contain;flex-shrink:0;border-radius:12px}.brand-title{min-width:0}.plus{border:0;background:var(--green);color:white;border-radius:12px;width:44px;height:44px;min-width:44px;padding:0;display:inline-flex;align-items:center;justify-content:center;font-size:30px;font-weight:600;line-height:1;cursor:pointer;flex-shrink:0}
+main{max-width:900px;margin:20px auto;padding:0 14px 30px}.list{display:none}.list.active-page{display:block}.page-nav{display:flex;justify-content:center;align-items:center;gap:14px;margin:8px auto 16px}.page-nav button{min-width:46px;min-height:42px;font-size:23px;font-weight:700}.page-counter{font-weight:700;font-size:14px;color:var(--muted);min-width:85px;text-align:center}.list.page-enter-right{animation:pageEnterRight .35s ease-out both}.list.page-enter-left{animation:pageEnterLeft .35s ease-out both}@keyframes pageEnterRight{from{opacity:.5;transform:translateX(60px)}to{opacity:1;transform:translateX(0)}}@keyframes pageEnterLeft{from{opacity:.5;transform:translateX(-60px)}to{opacity:1;transform:translateX(0)}}.list{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:18px;box-shadow:0 4px 16px #193b2510}
+.field{margin:12px 0}.label{display:block;font-size:12px;letter-spacing:.055em;font-weight:800;margin-bottom:7px}
+input[type=text],input[type=number],input[type=password]{width:100%;border:1px solid #cbd7ce;border-radius:10px;padding:12px;font:inherit;background:#fff;color:var(--ink);min-width:0}
+input:disabled{background:#f3f6f3;color:#526057}.row{display:flex;gap:8px;align-items:center}.row>*{min-width:0}.grow{flex:1}
+button{font:inherit;cursor:pointer;border-radius:10px;padding:10px 14px;border:1px solid var(--line);background:#fff;color:var(--ink)}
+button:disabled{opacity:.45;cursor:not-allowed}.ok{background:var(--green);border-color:var(--green);color:#fff;font-weight:700}.soft{background:var(--green2);border-color:#c9e1d1;color:var(--green)}.danger{color:var(--danger);border-color:#e7c7c4;background:#fff}.delete-list{background:#c62828!important;color:#fff!important;border:1px solid #c62828!important;font-weight:800;box-shadow:0 2px 5px #00000016;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;min-width:44px;padding:0;line-height:1}.delete-list:active{background:#991b1b!important}.list.slide-in-right{animation:slideInRight .38s cubic-bezier(.2,.8,.2,1) both}@keyframes slideInRight{from{opacity:0;transform:translateX(75px)}to{opacity:1;transform:translateX(0)}}@media(prefers-reduced-motion:reduce){.list.slide-in-right,.list.page-enter-right,.list.page-enter-left{animation:none}}
+.status{font-size:12px;color:var(--green);margin-top:6px}.muted{color:var(--muted);font-size:13px}
+.panel{background:#f7faf7;border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:15px}
+.photo-actions{display:flex;gap:8px;flex-wrap:wrap}.photo-preview{width:104px;height:124px;object-fit:cover;border-radius:10px;border:1px solid var(--line);display:block;margin-top:10px;background:#eef2ee}.hidden{display:none!important}
+.sizes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+.size-card{border:1px solid var(--line);border-radius:12px;padding:11px}.size-title{font-weight:800;margin-bottom:8px;display:flex;justify-content:space-between}
+.choices{display:flex;gap:6px;flex-wrap:wrap}.choice{padding:7px 10px;border-radius:8px;min-width:36px}.choice.active{background:var(--green);border-color:var(--green);color:#fff}
+.confirm{margin-top:10px;padding:10px;border-radius:10px;background:#fff8e8;border:1px solid #f0dfb5;font-size:13px}.confirm .row{margin-top:8px}
+.total{font-size:30px;font-weight:800;color:var(--green);font-variant-numeric:tabular-nums}.pricebox{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end}.grand{font-size:26px;font-weight:800;color:var(--green)}
+hr{border:0;border-top:1px solid var(--line);margin:16px 0}.modal{position:fixed;inset:0;background:#14251bcc;display:grid;place-items:center;padding:18px;z-index:10}.dialog{background:white;border-radius:16px;padding:18px;width:min(100%,390px);max-height:90dvh;overflow-y:auto;box-shadow:0 15px 50px #0003}.dialog h3{margin:0 0 8px}.dialog .row{margin-top:14px}
+footer{font-size:12px;color:var(--muted);text-align:center;padding:0 16px 24px}
+@media(max-width:520px){.brand-logo{width:42px;height:42px}.brand{gap:8px}.sizes{grid-template-columns:1fr}.list{padding:14px}.head{padding:12px 14px}h1{font-size:18px}.pricebox{grid-template-columns:1fr}}
+.close-page{background:#c62828;color:#fff;border:1px solid #c62828;width:44px;height:44px;min-width:44px;padding:0;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;font-size:25px;font-weight:750;line-height:1}.close-page:active{background:#991b1b}.page-actions{display:flex;justify-content:flex-end;align-items:center;gap:10px;margin-bottom:10px}.saved-note{font-size:12px;color:#27744b;font-weight:650}.closed-panel{max-width:900px;margin:10px auto;padding:0 14px}.closed-toggle{width:100%;background:#242424;color:#fff;border:1px solid #555}.closed-items{display:flex;flex-direction:column;gap:8px;margin-top:10px}.closed-item{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#fff;border:1px solid #ddd;border-radius:12px;padding:10px}.closed-item button{background:#176b45;color:white;border:0}.closed-item span{overflow-wrap:anywhere}
+.head-controls{display:flex;align-items:center;gap:8px}.quit-app{background:#c62828;color:#fff;border:1px solid #c62828;min-height:44px;padding:0 12px;font-size:14px;font-weight:750;white-space:nowrap}.quit-app:active{background:#991b1b}@media(max-width:520px){.quit-app{padding:0 9px;font-size:13px}.head-controls{gap:6px}.brand-logo{width:36px;height:36px}h1{font-size:16px}}.reset{display:block;width:100%;min-height:54px;background:#c62828!important;border:1px solid #c62828!important;color:#fff!important;font-size:16px;font-weight:800;text-align:center}.reset:active{background:#991b1b!important}.deposit-ok{min-width:58px}.deposit-line{display:flex;align-items:center;gap:10px;font-weight:750;cursor:pointer}.deposit-check{width:21px;height:21px;accent-color:var(--green)}.deposit-amount{margin-top:10px}.deposit-amount input{max-width:220px}.due{font-size:27px;font-weight:850;color:var(--green)}.export-actions{margin-top:16px}.export-text{width:100%;background:#1f2937;color:#fff;border:1px solid #4b5563;font-weight:700;padding:14px;border-radius:12px}.contact-fields{display:grid;gap:7px}.contact-fields label{font-weight:700;margin-top:7px}.contact-fields input{width:100%;padding:12px;border:1px solid #cbd7ce;border-radius:10px;font:inherit}.contact-fields .row{display:flex;gap:8px}.contact-fields .muted{font-size:12px}.contact-card{background:#f7faf8;border:1px solid #d6e3db;border-radius:12px;padding:12px}.contact-detail-line{display:flex;gap:6px;align-items:flex-start;flex-wrap:wrap;padding:6px 0;border-bottom:1px solid #e4ece7;overflow-wrap:anywhere}.contact-detail-line:last-child{border-bottom:0}.contact-detail-line strong{min-width:95px}.page-nav{margin:12px 0}.page-nav .plus{margin-left:8px;min-width:48px;min-height:44px;font-size:27px}.bottom-quit{display:flex;justify-content:center;margin:26px 0 10px}.bottom-quit .quit-app{min-height:48px;padding:0 24px}.head-controls .danger{white-space:nowrap}@media(max-width:520px){.page-nav{gap:7px}.page-nav button{min-width:40px}.page-nav .plus{min-width:45px;margin-left:3px}.head-controls .danger{font-size:13px;padding:9px}}.page-nav[aria-label="Navigation en haut"]{position:relative;padding-right:0}.page-nav[aria-label="Navigation en haut"] #add{position:absolute;right:0;top:50%;transform:translateY(-50%);margin:0}.page-nav[aria-label="Navigation en haut"] #add:active{transform:translateY(-50%) scale(.97)}#sync-status[hidden]{display:none!important}.contact-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}.contact-actions .soft{display:flex;align-items:center;justify-content:center;min-width:0;width:100%;min-height:48px;white-space:normal;overflow-wrap:anywhere;line-height:1.3;text-align:center;text-decoration:none;padding:10px 9px;font-size:14px}.contact-actions .save-whatsapp{background:#e7f5eb;color:#176b45;border-color:#c4e2cc}.contact-actions a.soft{background:#f1f6fa;color:#175b80;border-color:#d4e4ef}@media(max-width:350px){.contact-actions{grid-template-columns:1fr}}
+.contact-fields select{width:100%;padding:12px;border:1px solid #cbd7ce;border-radius:10px;font:inherit;background:white}.phone-row{display:flex;align-items:stretch;gap:8px}.phone-row #phone-prefix{display:flex;align-items:center;justify-content:center;min-width:65px;padding:10px;background:#e7f5eb;border-radius:10px;font-weight:750}.phone-row input{min-width:0;flex:1} .export-choice{display:grid;gap:12px;margin:14px 0}.export-choice button{min-height:54px;font-weight:750}.page-nav #page-counter-top{font-size:13px;text-align:center;max-width:160px;line-height:1.25;font-weight:750}
+#page-counter-top{color:#fff!important;font-size:clamp(16px,4.2vw,22px)!important;max-width:none!important;line-height:1.3!important}
+.page-nav:has(#page-counter-top){justify-content:space-between;gap:12px;background:#202420;border-radius:14px;padding:12px}
+.export-dialog{width:min(100%,680px)!important;max-height:94dvh!important}
+.export-preview{border:1px solid #bfcac2;background:#f2f4f2;border-radius:12px;overflow:auto;max-height:49dvh;min-height:110px}
+.export-pdf-preview{display:block;width:100%;height:auto;background:white}
+.export-txt-preview{white-space:pre-wrap;overflow-wrap:anywhere;background:white;color:#202923;padding:14px;margin:0;font:13px/1.55 monospace}
+.export-dialog .export-choice{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.export-dialog .export-choice button{font-size:13px;padding:10px 5px}
+@media(max-width:380px){.export-dialog .export-choice{grid-template-columns:1fr}}
+
+/* Aperçu lisible du TXT, avec le contenu identique au fichier exporté */
+.export-txt-preview{white-space:normal;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;line-height:1.6;padding:20px;background:#fff;color:#202923}
+.txt-line{overflow-wrap:anywhere;padding:3px 0}
+.txt-spacer{height:12px;padding:0}
+.txt-heading{font-size:19px;font-weight:800;text-align:center;color:#176b45;padding:8px 0 14px;border-bottom:2px solid #176b45}
+.txt-section{font-size:15px;font-weight:800;color:#176b45;background:#eaf4ee;padding:8px 10px;margin:8px -4px;border-radius:7px}
+.txt-total{font-weight:800;background:#f2f6f3;padding:7px 10px;margin:4px -4px;border-radius:6px}
+.txt-line strong{color:#43594a}
+.bottom-quit .quit-app{background:#176b45;border-color:#176b45}
+.bottom-quit .quit-app:active{background:#105133}
+ 
+/* Logo placé en haut à droite */
+.head{justify-content:flex-end!important}
+.brand{margin-left:auto}
+/* La réinitialisation est maintenant uniquement proposée en bas */
+.list .reset{display:none!important}
+.bottom-quit .quit-app{background:#c62828;color:white;white-space:normal;text-align:center}
+
+.brand-heading{margin:0;color:#183c2d;font-size:clamp(16px,3.8vw,23px);font-weight:750;line-height:1.25;letter-spacing:-.2px}
+.brand-heading span{font-size:.78em;font-weight:500;color:#66786b;white-space:nowrap}
+@media(max-width:390px){.brand-heading span{display:block;margin-top:3px}}
+ .export-language-choice{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}.export-language-choice button{padding:16px;font-size:17px;font-weight:700}
+
+/* Saisie groupée : présentation compacte et adaptée au mobile */
+.all-sizes-box{background:#f6f9f7;border:1px solid #d9e5dd;border-radius:14px;padding:14px 15px;margin:14px 0 18px}
+.all-sizes-box .label{display:block;margin:0 0 10px;color:#244b39;font-size:14px;font-weight:750;letter-spacing:0;text-transform:none;line-height:1.35}
+.all-sizes-box .row{display:flex;gap:10px;align-items:stretch;flex-wrap:nowrap}
+.all-sizes-box .all-sizes-input{flex:1;min-width:0;width:0;max-width:none;min-height:46px;border:1px solid #c9d8cf;border-radius:10px;background:#fff;padding:9px 13px;font-size:17px}
+.all-sizes-box .apply-all-sizes{flex:0 0 auto;min-height:46px;padding:9px 16px;border-radius:10px;font-size:14px;white-space:nowrap}
+@media(max-width:360px){.all-sizes-box{padding:12px}.all-sizes-box .apply-all-sizes{padding:9px 11px;font-size:13px}}
+
+
+/* Harmonisation visuelle — Gestion Abayas by Assia Collection */
+:root{--green:#245342;--green2:#edf4ef;--ink:#24362e;--muted:#6d7b72;--line:#e1e8e1;--bg:#f5f6f2;--danger:#a63c39}
+html{scroll-behavior:smooth}body{background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+header{background:#fffdf9;border-bottom:1px solid #e8e6df;box-shadow:0 2px 14px #233c2d09}
+.head{padding:18px 20px;max-width:900px;justify-content:center!important}
+.brand{margin:0 auto!important;text-align:center}
+.brand-heading{font-size:clamp(19px,4.8vw,25px);font-weight:750;color:#263e33;letter-spacing:-.65px;line-height:1.2}
+.brand-heading span{display:block!important;margin-top:5px!important;color:#8b806e;font-size:12px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase}
+main{margin:17px auto 0;padding:0 15px 28px}
+.page-nav:has(#page-counter-top){background:#284b3b;border:1px solid #345d49;border-radius:17px;padding:13px 15px;box-shadow:0 7px 18px #1d48351a;margin:0 auto 20px}
+#page-counter-top{font-size:clamp(14px,4vw,18px)!important;font-weight:700;letter-spacing:-.15px;color:#fff!important}
+.plus{background:#fff!important;color:#28503e!important;border:0!important;border-radius:11px!important;min-width:44px;min-height:44px;box-shadow:0 2px 7px #0002;font-size:25px}
+.list{background:#fff;border:1px solid #e7ebe6;border-radius:19px;padding:20px;box-shadow:0 8px 30px #223c2a0b;margin-bottom:18px}
+.field{margin:16px 0}.label{font-size:12px;letter-spacing:.035em;color:#405649;font-weight:750;margin-bottom:8px}
+input[type=text],input[type=number],input[type=password],.contact-fields select{border:1px solid #d5dfd5;border-radius:11px;min-height:46px;background:#fff;padding:12px 13px;box-shadow:0 1px 2px #193e2405;outline:none}
+input:focus,.contact-fields select:focus{border-color:#4d8365;box-shadow:0 0 0 3px #4d83651e}
+button{border-radius:11px;min-height:42px;font-weight:650;transition:background-color .15s,border-color .15s,transform .12s}
+button:active{transform:scale(.985)}.ok{background:#245b43;border-color:#245b43}.soft{background:#edf4ef;border-color:#d5e6da;color:#245b43}
+.panel{background:#f9faf7;border:1px solid #e4eae3;border-radius:15px;padding:17px;margin-top:18px}
+.all-sizes-box{background:#f1f6f1;border:1px solid #dce9dc;border-radius:15px;padding:15px;margin:17px 0}
+.all-sizes-box .label{font-size:14px;color:#315743;margin-bottom:11px}
+.all-sizes-box .all-sizes-input{border-radius:10px;min-height:47px}.all-sizes-box .apply-all-sizes{background:#245b43;border-color:#245b43;color:#fff;min-height:47px}
+.sizes{gap:11px;margin-top:13px}.size-card{background:#fff;border:1px solid #e0e7e0;border-radius:14px;padding:13px;box-shadow:0 2px 8px #223c2a06}
+.size-title{font-size:15px;color:#345241;margin-bottom:11px}.choices{gap:7px}.choice{min-width:38px;min-height:39px;padding:8px 10px;border-color:#e0e6df;background:#fafbf9}.choice.active{background:#245b43;border-color:#245b43;color:#fff;box-shadow:0 2px 6px #245b4326}
+.total,.grand{color:#245b43;letter-spacing:-.6px}.photo-preview{border-radius:13px;border:1px solid #dfe6de;background:#f7f8f6}
+.page-nav:not(:has(#page-counter-top)){margin:20px auto 14px}.page-nav:not(:has(#page-counter-top)) button{background:#fff;border:1px solid #dce5dc;min-width:45px;min-height:45px;box-shadow:0 2px 7px #223c2a0a}
+.bottom-quit{margin:18px auto;text-align:center}.bottom-quit .quit-app{background:#fff!important;color:#a1423c!important;border:1px solid #e7c8c5!important;border-radius:12px;min-height:47px;box-shadow:none}
+.dialog{border-radius:20px;padding:22px;box-shadow:0 18px 60px #0b211e3a}.dialog h3{color:#244a39;margin-top:0}
+.export-preview{border-radius:13px;background:#fff;border:1px solid #e2e8e2}.export-dialog .export-choice button{min-height:46px}
+footer{color:#849087;font-size:11px;line-height:1.5;padding-bottom:30px}
+@media(max-width:520px){.head{padding:15px 14px}.list{padding:15px;border-radius:16px}.sizes{grid-template-columns:1fr}.panel{padding:14px}.page-nav:has(#page-counter-top){padding:11px 12px}.all-sizes-box{padding:13px}}
+
+
+/* Écran stabilisé : aucun déplacement horizontal ou zoom accidentel.
+   Le défilement vertical reste possible pour accéder à toute la fiche. */
+html,body{width:100%;max-width:100%;overflow-x:hidden!important;overscroll-behavior-x:none}
+html{touch-action:pan-y}
+body{margin:0;position:relative;touch-action:pan-y}
+header,main,footer,.head,.list,.page-nav,.panel{max-width:100%;box-sizing:border-box}
+main,.list{min-width:0}
+input,select,textarea{max-width:100%;box-sizing:border-box;font-size:max(16px,1em)}
+.page-nav{min-width:0}
+@media(max-width:520px){
+ .page-nav[aria-label="Navigation en haut"]{padding-right:58px!important}
+ #page-counter-top{overflow-wrap:anywhere}
+}
+
+/* Adaptation iPhone : zones sûres, clavier, zoom et commandes tactiles. */
+html,body{touch-action:auto;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+header{padding-top:env(safe-area-inset-top,0px)}
+footer{padding-bottom:calc(30px + env(safe-area-inset-bottom,0px))}
+button,.choice{min-height:44px;touch-action:manipulation}
+input,select,textarea,.contact-fields input{font-size:16px!important}
+.modal{height:100%;height:100dvh;padding: max(12px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(12px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));overflow-y:auto}
+.dialog{max-height:100%;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch}
+@media(max-width:380px){.row{flex-wrap:wrap}.row>.grow{flex-basis:55%}.all-sizes-box .row,.phone-row{flex-wrap:nowrap}.choices{gap:5px}.choice{min-width:32px;padding:7px 8px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}button{transition:none}}
+
+/* Correctif : indicatif WhatsApp sur fond noir */
+.phone-row #phone-prefix{
+ background:#080808!important;
+ color:#f8ead6!important;
+ -webkit-text-fill-color:#f8ead6!important;
+ border:1px solid #79614e!important;
+ border-radius:12px!important;
+ box-shadow:none!important;
+}
+
+/* Assia Collection : contacts noir et champagne */
+.contact-open{background:#100e0e!important;color:#e8c78f!important;border:1px solid #b89764!important;border-radius:14px!important;font-weight:750!important;text-align:center!important;box-shadow:inset 0 0 0 1px #3b2d21!important}
+.contact-open:hover,.contact-open:focus-visible{background:#201915!important;color:#ffe0aa!important}
+.contact-card{background:#100e0e!important;color:#e8c78f!important;border:1px solid #9d7c50!important}
+.contact-detail-line{border-bottom-color:#4a3828!important;color:#e8c78f!important}
+.contact-detail-line strong{color:#f4d6a3!important}
+.contact-fields label{color:#e8c78f!important}
+.contact-fields input,.contact-fields select{background:#171313!important;color:#f5e7d1!important;border:1px solid #8c6c4a!important}
+/* La page fraîche apparaît depuis la gauche, les pages existantes restent à sa droite. */
+.list.page-enter-left{animation:assiaNewPage .38s ease-out both}
+@keyframes assiaNewPage{from{opacity:.45;transform:translateX(-52px)}to{opacity:1;transform:translateX(0)}}
+
+/* Ajustements Safari iOS : champs lisibles et marges des zones sûres */
+@supports (-webkit-touch-callout: none) {
+  input, select, textarea { font-size: 16px; }
+  body { -webkit-text-size-adjust: 100%; }
+  button { touch-action: manipulation; }
+}
+</style>
+
+
+
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Assia Collection">
+<style>
+.export-txt-preview{white-space:pre-wrap!important;overflow-wrap:anywhere!important;font:14px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace!important;padding:18px!important;background:#fff!important;color:#1e3028!important;margin:0!important}
+</style>
+
+<style id="assia-refinement-2026">
+/* Assia Collection · finition premium, sans modifier la logique métier */
+:root{
+ --green:#244b42;--green2:#edf3ef;--ink:#263630;
+ --muted:#77817a;--line:#e5e7df;--bg:#f8f6f1;
+ --danger:#a44a44;--assia-gold:#b59b70;--assia-cream:#f8f2e8;
+}
+html{width:100%;max-width:100%;overflow-x:hidden!important;overscroll-behavior-x:none;touch-action:pan-y}
+body{width:100%;max-width:100%;overflow-x:hidden!important;overscroll-behavior-x:none;
+ touch-action:pan-y;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+header{background:#fffcf7;border-bottom:1px solid #ebe5d9;box-shadow:0 3px 18px rgba(42,51,44,.045)}
+.head{padding:17px 16px}
+.brand-heading{color:#283f38;font-size:clamp(19px,4.7vw,25px);font-weight:720;letter-spacing:-.55px}
+.brand-heading span{color:#9b8768;letter-spacing:1.35px;font-size:11px;font-weight:650}
+main{max-width:900px;margin:19px auto 0;padding:0 14px 30px}
+.page-nav:has(#page-counter-top){background:linear-gradient(125deg,#244a40,#34584c);border:1px solid #355b4e;
+ box-shadow:0 8px 24px rgba(36,74,64,.13);border-radius:17px}
+#page-counter-top{color:#fff!important;font-weight:650;letter-spacing:.1px}
+.plus{background:#f9f4e9!important;color:#244a40!important;border-radius:12px!important;box-shadow:0 2px 8px #152d2318}
+.list{background:#fffefa;border:1px solid #eae6dc;border-radius:19px;
+ box-shadow:0 8px 28px rgba(52,58,45,.055);padding:19px}
+.field{margin:16px 0}.label{color:#4a6055;font-weight:750;letter-spacing:.025em}
+input[type=text],input[type=number],input[type=password],textarea,select,.contact-fields select{
+ background:#fff;border:1px solid #dedfd6;border-radius:12px;color:#273c32;
+ min-height:46px;box-shadow:0 1px 2px #26363008}
+input:focus,textarea:focus,select:focus{outline:none;border-color:#9aaf9e!important;box-shadow:0 0 0 3px #809e8625!important}
+button{border-radius:11px;border-color:#e2e5dc;font-weight:650}
+.ok,.all-sizes-box .apply-all-sizes{background:#285748!important;border-color:#285748!important;color:#fff!important}
+.soft{background:#f0f4ed;color:#2a5748;border-color:#dce7db}
+.panel{background:#fbfaf6;border:1px solid #ebe9e0;border-radius:15px}
+.all-sizes-box{background:#f4f6f0;border:1px solid #e1e9dc;border-radius:15px}
+.all-sizes-box .label{color:#355748}
+.size-card{background:#fff;border:1px solid #e8e8df;border-radius:14px;box-shadow:0 3px 12px #223c2a08}
+.size-title{color:#365449}
+.choice{border-color:#e5e7df;background:#fffefa}
+.choice.active{background:#2a5849;border-color:#2a5849;color:#fff}
+.total,.grand{color:#285748}
+.photo-preview{background:#f7f6f1;border-color:#e7e5dd}
+.dialog{border-radius:20px;border:1px solid #eae6dc;background:#fffefa}
+.dialog h3{color:#2b4b3f}
+.export-preview{border-color:#e8e5dc;background:#fff}
+.bottom-quit .quit-app{background:#fffefa!important;color:#a44a44!important;border-color:#ebd9d4!important}
+footer{color:#92968b}
+header,main,footer,.head,.list,.page-nav,.panel{max-width:100%;min-width:0;box-sizing:border-box}
+input,select,textarea,button{touch-action:manipulation}
+@media(max-width:520px){
+ .head{padding:15px 14px}.list{padding:15px;border-radius:16px}
+ .panel{padding:14px}.page-nav:has(#page-counter-top){padding:12px}
+ .all-sizes-box{padding:13px}
+}
+@media(prefers-reduced-motion:reduce){.list{animation:none!important}}
+</style>
+
+<style id="ga-premium-android-2026">
+/* Gestion Abayas — signature premium, noir, émeraude et champagne */
+:root{color-scheme:dark;--green:#d6b887;--green2:#252e2a;--ink:#f2efe9;--muted:#b8b5ae;--line:#3b413c;--bg:#121615;--danger:#ed918d}
+html,body{background:#121615!important;color:#f2efe9!important;overflow-x:hidden}
+body{background:radial-gradient(ellipse 120% 380px at 50% -100px,#263b31 0%,#161c19 62%,#121615 100%) fixed!important;-webkit-font-smoothing:antialiased}
+header{background:linear-gradient(120deg,#19251f,#151a18)!important;border-bottom:1px solid #4a4c3f!important;box-shadow:0 8px 28px #0004!important}
+.head{padding-top:20px!important;padding-bottom:19px!important}
+.brand-heading,h1{color:#f6f0e7!important;letter-spacing:-.5px}
+.brand-heading span{color:#d4b88c!important;letter-spacing:2px!important}
+main{margin-top:18px!important}
+#sync-status[hidden],#sync-retry-panel[hidden]{display:none!important}
+.page-nav:has(#page-counter-top){background:linear-gradient(115deg,#294d40,#20362e)!important;border:1px solid #55715e!important;box-shadow:0 12px 28px #0005!important;border-radius:19px!important;padding:12px 15px!important}
+#page-counter-top{color:#f8f2e9!important;font-weight:750!important}
+.plus{background:linear-gradient(145deg,#e9cea2,#cba76f)!important;color:#22251f!important;border:1px solid #f0d6a8!important;box-shadow:0 3px 12px #0005!important;border-radius:13px!important}
+.list{background:linear-gradient(155deg,#1d2420,#171c1a 75%)!important;border:1px solid #485147!important;border-radius:22px!important;box-shadow:0 16px 36px #0006,inset 0 1px 0 #ffffff08!important}
+.panel{background:#202824!important;border:1px solid #455247!important;border-radius:17px!important;box-shadow:inset 0 1px 0 #ffffff06!important}
+.label,.size-title,.field label{color:#d8c4a2!important}
+.muted,.status{color:#b8b5ae!important}
+input[type=text],input[type=number],input[type=tel],input[type=password],input[type=email],textarea,select,.contact-fields input,.contact-fields select{
+ background:#111714!important;color:#f7f1e7!important;-webkit-text-fill-color:#f7f1e7!important;border:1px solid #596153!important;border-radius:12px!important;box-shadow:inset 0 2px 5px #0003!important;
+}
+input::placeholder,textarea::placeholder{color:#a7aaa1!important;-webkit-text-fill-color:#a7aaa1!important}
+input:focus,textarea:focus,select:focus{outline:none!important;border-color:#d8b98b!important;box-shadow:0 0 0 3px #d8b98b30!important}
+button{background:#29332c!important;color:#f3e9da!important;border:1px solid #536252!important;border-radius:12px!important;font-weight:700!important}
+button:active{filter:brightness(1.14)}
+button:disabled{opacity:.55}
+.ok,.apply-all-sizes,.choice.active{background:linear-gradient(135deg,#e7c997,#caa773)!important;color:#24221d!important;border:1px solid #e9cd9d!important}
+.soft{background:#263c31!important;color:#e9dcc4!important;border-color:#4d6855!important}
+.close-page,.danger{background:#692b2b!important;color:#fff0ee!important;border-color:#b4645c!important}
+.contact-card{background:#151d19!important;color:#f4eee4!important;border:1px solid #56654f!important;border-radius:14px!important}
+.contact-card *{color:#f4eee4!important;-webkit-text-fill-color:currentColor!important}
+.contact-detail-line{border-bottom-color:#39463b!important}
+.contact-fields label{color:#e4cda7!important}
+.contact-fields .row,.contact-actions{min-width:0}
+.contact-actions .soft{background:#263c31!important;color:#f0e3cc!important;border-color:#5b715b!important}
+.all-sizes-box{background:#222f27!important;border:1px solid #4a624f!important;border-radius:16px!important}
+.all-sizes-box .label{color:#e5c99f!important}
+.size-card{background:#1a221d!important;border:1px solid #455345!important;border-radius:15px!important}
+.choice{background:#27312a!important;color:#f3ebdd!important;border-color:#4b5a4c!important}
+.confirm{background:#302b20!important;color:#f3e7d3!important;border-color:#76633e!important}
+.total,.grand,.due{color:#e5c18c!important}
+.export-preview{background:#f5f2eb!important;border-color:#776f60!important}
+.export-txt-preview{background:#f8f6f0!important;color:#25352b!important}
+.export-txt-preview *{color:inherit}
+.export-txt-preview .txt-heading,.export-txt-preview .txt-section{color:#245342!important}
+.export-txt-preview .txt-section{background:#e8eee6!important}
+.modal{background:#050806d9!important}
+.dialog{background:#1c2520!important;color:#f6efe5!important;border:1px solid #6b624c!important;box-shadow:0 22px 60px #000b!important}
+.dialog h3{color:#e6c796!important}
+#modal-text,#modal-extra{color:#eee3d4!important}
+.page-nav:not(:has(#page-counter-top)) button{background:#25332a!important;color:#f0d3a3!important;border-color:#4d6250!important}
+.bottom-quit .quit-app{background:#352321!important;color:#f1aaa3!important;border:1px solid #77504b!important}
+footer{background:#121615!important;color:#9da89d!important}
+@media(max-width:520px){main{padding-left:12px!important;padding-right:12px!important}.list{padding:16px!important}.panel{padding:15px!important}.head{padding-left:12px!important;padding-right:12px!important}}
+</style><style id="ga-neo-luxe-android-contrast">
+/* GA · Édition Neo Luxe Android : lisibilité et contraste renforcés */
+:root{color-scheme:dark;--green:#b9e6d0;--green2:#22382f;--ink:#f6f8f6;--muted:#b5c8bc;--line:#42594b;--bg:#0c1210}
+html,body{background:#0b1110!important;color:#f6f8f6!important}
+body{background:radial-gradient(ellipse 110% 500px at 50% -120px,#214536 0%,#121d18 52%,#0b1110 100%) fixed!important}
+header{background:linear-gradient(120deg,#12251d,#0d1512)!important;border-bottom:1px solid #4d7560!important}
+.brand-heading,h1{color:#f8fbf8!important}
+.brand-heading span{color:#cce5d6!important}
+.list{background:linear-gradient(160deg,#182a21,#111c17)!important;border:1px solid #41634f!important;box-shadow:0 16px 35px #0007,inset 0 1px 0 #b4ffcc10!important}
+.panel,.size-card,.all-sizes-box{background:#17261e!important;border:1px solid #3b5a47!important}
+.page-nav:has(#page-counter-top){background:linear-gradient(110deg,#236047,#1a4232)!important;border-color:#65967b!important}
+#page-counter-top{color:#f8fff9!important}
+.plus,.ok,.apply-all-sizes,.choice.active{background:linear-gradient(135deg,#baf1d3,#79cfa7)!important;color:#10251a!important;border:1px solid #baf1d3!important}
+button{background:#233c2d!important;color:#f6fff8!important;border:1px solid #547961!important}
+button.soft{background:#234536!important;color:#e6ffef!important;border-color:#619a76!important}
+.label,.size-title,.field label{color:#cce8d5!important}
+.muted{color:#b9cabc!important}
+/* Contact enregistré : texte et valeurs tous visibles, jamais blancs sur blanc */
+.contact-card,.contact-info,.contact-details,[id*="contact-view"],[id*="contact-display"]{
+ background:#10231a!important;color:#f6fff8!important;border-color:#528469!important;
+}
+.contact-card{border:1px solid #579271!important;border-radius:16px!important;padding:14px!important;box-shadow:inset 0 1px 0 #c7ffdb13,0 8px 22px #0004!important}
+.contact-card *,.contact-detail-line,.contact-detail-line span,.contact-detail-line a,
+.contact-card strong,.contact-card b,.contact-card p,.contact-card div{
+ color:#f6fff8!important;-webkit-text-fill-color:#f6fff8!important;opacity:1!important;
+}
+.contact-detail-line{border-bottom:1px solid #345c46!important;line-height:1.5!important}
+.contact-detail-line strong{color:#b7edcf!important;-webkit-text-fill-color:#b7edcf!important}
+/* Champs de contact et fenêtre d'édition : fond sombre et texte clair */
+.contact-fields,.contact-fields .row,.contact-fields label{background:transparent!important;color:#e7f8eb!important}
+.contact-fields label{color:#c0edce!important;-webkit-text-fill-color:#c0edce!important}
+input,textarea,select,.contact-fields input,.contact-fields textarea,.contact-fields select,
+input[type="text"],input[type="tel"],input[type="number"],input[type="email"],input[type="password"]{
+ background-color:#0e1b15!important;color:#ffffff!important;-webkit-text-fill-color:#ffffff!important;
+ border:1px solid #5d8d6e!important;border-radius:12px!important;opacity:1!important;
+ box-shadow:inset 0 2px 5px #0004!important;
+}
+input::placeholder,textarea::placeholder,.contact-fields input::placeholder{
+ color:#b9cbbb!important;-webkit-text-fill-color:#b9cbbb!important;opacity:1!important;
+}
+input:focus,textarea:focus,select:focus{border-color:#a7e9bf!important;outline:none!important;box-shadow:0 0 0 3px #84dba940!important}
+input:disabled,input[readonly]{background:#1b2b21!important;color:#e3f5e8!important;-webkit-text-fill-color:#e3f5e8!important}
+.dialog{background:#15271d!important;color:#f8fff9!important;border:1px solid #5e9473!important;box-shadow:0 20px 60px #000b!important}
+.dialog h3,#modal-text,#modal-extra{color:#f6fff7!important}
+.modal{background:#020b07e6!important}
+.choice{background:#1e3427!important;color:#f2fff5!important;border-color:#50775c!important}
+.export-txt-preview{background:#f9fbf7!important;color:#14251b!important}
+.export-txt-preview *{color:inherit}
+@media(max-width:520px){.list{border-radius:20px!important}.contact-card{padding:13px!important}}
+</style><style>
+/* ASSIA COLLECTION — édition Minuit / Champagne, refonte visuelle 2026 */
+:root{color-scheme:dark;--green:#d9b982;--green2:#29241f;--ink:#f6f0e8;--muted:#c0b4a5;--line:#504338;--bg:#0c0b0c;--danger:#f3a4a0;--assia-gold:#e0bf8b}
+html,body{background:#0c0b0c!important;color:#f6f0e8!important}
+body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif!important;background:radial-gradient(ellipse 90% 340px at 50% -110px,#34251f 0%,#151113 62%,#0c0b0c 100%) fixed!important;letter-spacing:.005em}
+header{background:rgba(17,14,15,.97)!important;border-bottom:1px solid #5a4534!important;box-shadow:0 10px 30px #0008!important}
+.head{max-width:900px;padding:20px 18px!important}
+.brand-heading{font-family:Georgia,'Times New Roman',serif!important;font-size:clamp(23px,5.2vw,32px)!important;font-weight:500!important;letter-spacing:.01em!important;color:#f8ebd7!important;line-height:1.13!important}
+.brand-heading span{display:block!important;font-family:system-ui,-apple-system,sans-serif!important;font-size:10px!important;font-weight:700!important;letter-spacing:.28em!important;text-transform:uppercase!important;color:#d9b982!important;margin-top:8px!important}
+main{margin-top:25px!important;padding:0 15px 42px!important}
+.page-nav:has(#page-counter-top){background:linear-gradient(120deg,#2a1e1b,#1a1515)!important;border:1px solid #75563e!important;border-radius:20px!important;padding:14px 16px!important;box-shadow:0 12px 30px #0007!important;justify-content:space-between!important}
+#page-counter-top{color:#f5e8d6!important;font-weight:650!important;letter-spacing:.015em!important;text-align:left!important}
+.plus{background:linear-gradient(135deg,#f0d9ae,#c59b61)!important;color:#201713!important;border:1px solid #f5ddb3!important;border-radius:13px!important;box-shadow:0 5px 16px #0007!important}
+.list{background:linear-gradient(150deg,#20191a,#141214 85%)!important;border:1px solid #4c3b35!important;border-radius:23px!important;box-shadow:0 18px 45px #0008,inset 0 1px 0 #fff1!important;padding:clamp(15px,4vw,23px)!important}
+.panel,.size-card,.all-sizes-box,.contact-card,.contact-info,.contact-details,[id*='contact-view'],[id*='contact-display']{background:#241d1c!important;border:1px solid #58473a!important;color:#f6eee3!important;border-radius:16px!important}
+.label,.size-title,.field label{color:#e8cda4!important;font-weight:750!important;letter-spacing:.035em!important}
+.muted,.status,small{color:#c9b9a9!important}
+input[type=text],input[type=number],input[type=tel],input[type=password],input[type=email],textarea,select,.contact-fields input,.contact-fields select{background:#110f10!important;color:#fff4e7!important;-webkit-text-fill-color:#fff4e7!important;border:1px solid #79614e!important;border-radius:12px!important;box-shadow:none!important;min-height:46px}
+input::placeholder,textarea::placeholder{color:#a8998c!important;-webkit-text-fill-color:#a8998c!important;opacity:1!important}
+input:focus,textarea:focus,select:focus{outline:none!important;border-color:#e1bb80!important;box-shadow:0 0 0 3px #d9b98230!important}
+input:disabled{background:#282220!important;color:#c8b6a4!important;-webkit-text-fill-color:#c8b6a4!important}
+button{background:#332720!important;color:#f9ebd7!important;border:1px solid #796047!important;border-radius:12px!important;font-weight:650!important;min-height:42px}
+button.soft,.soft{background:#352921!important;color:#f5dfbc!important;border-color:#826447!important}
+button.ok,.ok,.all-sizes-box .apply-all-sizes,.apply-all-sizes,.choice.active{background:linear-gradient(135deg,#ebd0a1,#cba36c)!important;color:#201611!important;-webkit-text-fill-color:#201611!important;border-color:#ebd0a1!important;font-weight:800!important}
+button:focus-visible{outline:2px solid #f4d39e!important;outline-offset:3px}
+.contact-card *,.contact-detail-line,.contact-detail-line span,.contact-detail-line a,.contact-card strong,.contact-card b,.contact-card p,.contact-card div{color:#fff1df!important;-webkit-text-fill-color:#fff1df!important;opacity:1!important}
+.contact-detail-line{border-bottom:1px solid #574638!important}
+.contact-detail-line strong{color:#e8c99a!important;-webkit-text-fill-color:#e8c99a!important}
+.page-nav:not(:has(#page-counter-top)){background:#191516!important;border:1px solid #44362e!important;border-radius:16px!important;padding:10px!important}
+.page-counter{color:#e5cfb0!important}
+footer{color:#bba998!important;background:#100e0f!important;border-top:1px solid #41342c!important;font-size:12px!important;line-height:1.7!important;padding:22px 18px 30px!important}
+.modal{background:#000b!important}.dialog{background:#20191a!important;color:#f9eee0!important;border:1px solid #806348!important;border-radius:22px!important;box-shadow:0 25px 65px #000b!important}
+.dialog h3{color:#f2d6a8!important;font-family:Georgia,serif!important;font-weight:500!important;font-size:24px!important}
+.export-txt-preview{background:#1a1515!important;color:#f7ead6!important;border:1px solid #67503d!important}
+.quit-app{background:#291a1b!important;color:#f3c0bb!important;border-color:#704747!important}
+@media(max-width:480px){.head{padding:16px!important}.brand-heading{font-size:24px!important}.list{border-radius:19px!important}.page-nav:has(#page-counter-top){gap:10px!important}}
+</style>
+<style>.seller-refund{margin-top:14px;padding:15px 13px;border:1px solid #b99b69;border-radius:12px;background:#2a2119;color:#f1d9a6;display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}.seller-refund span{font-size:12px;font-weight:700;letter-spacing:.03em}.seller-refund strong{font-size:22px;white-space:nowrap}</style>
+<style id="photo-actions-android-inline">
+/* Les deux choix photo restent côte à côte sur Android. */
+.photo-actions{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px!important;align-items:stretch;width:100%}
+.photo-actions>.camera,.photo-actions>.gallery{min-width:0!important;width:100%;max-width:100%;box-sizing:border-box;white-space:normal;overflow-wrap:break-word;text-align:center;line-height:1.2;padding:12px 6px!important;font-size:clamp(11px,3.15vw,15px)!important;display:flex;justify-content:center;align-items:center}
+.photo-actions>.remove-photo:not([hidden]){grid-column:1/-1;justify-self:start}
+.photo-actions>.remove-photo[hidden]{display:none!important}
+</style>
+<style id="assia-photo-large-overlay">
+.photo-preview-wrap{position:relative;width:100%;max-width:560px;margin:14px auto 0;overflow:hidden;border-radius:18px;border:1px solid #6a5543;background:#171311}
+.photo-preview-wrap .photo-preview{display:block!important;width:100%!important;height:auto!important;max-height:540px;aspect-ratio:4/5;object-fit:contain!important;margin:0!important;border:0!important;border-radius:0!important;background:#171311!important}
+.photo-preview-wrap .remove-photo{position:absolute!important;top:12px;right:12px;display:flex!important;align-items:center;justify-content:center;width:46px!important;height:46px!important;min-width:46px!important;padding:0!important;border-radius:50%!important;background:rgba(94,38,39,.94)!important;border:1px solid #b78180!important;color:#fff!important;box-shadow:0 3px 12px #0008;z-index:2;cursor:pointer}
+.photo-preview-wrap .remove-photo svg{pointer-events:none}
+</style>
+<style>
+/* Assia Collection — commandes compactes, finition minuit & champagne */
+.abaya-name-row{display:flex!important;align-items:stretch;gap:8px;min-width:0}
+.abaya-name-row .name-input{min-width:0;flex:1 1 auto}
+.abaya-name-tools{display:flex;flex:0 0 auto;align-items:center;gap:6px}
+.abaya-icon-btn{width:42px;min-width:42px;height:44px;display:inline-flex;align-items:center;justify-content:center;padding:0!important;border:1px solid #b99667!important;border-radius:12px!important;background:#382b22!important;color:#f3d7a5!important;box-shadow:none!important}
+.abaya-icon-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.abaya-icon-delete{background:#512526!important;color:#f9d6d0!important;border-color:#a45d60!important}
+.abaya-locked-note{display:flex;align-items:center;gap:7px;color:#b8a99c;font-size:12px;margin-top:9px}
+.abaya-locked-check{color:#dfbd83;font-weight:bold}
+.luxe-contact-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;margin-top:14px!important}
+.luxe-contact-actions .soft{display:flex!important;gap:9px;align-items:center;justify-content:center;min-height:54px!important;padding:11px 9px!important;background:#342820!important;color:#f6e8d5!important;border:1px solid #ae8759!important;border-radius:16px!important;font-weight:650!important;font-size:13px!important;line-height:1.2!important;white-space:normal!important;text-align:center!important;text-decoration:none!important}
+.luxe-contact-actions .contact-action-icon{color:#e5bc82;font-size:23px;flex:0 0 auto}
+.luxe-contact-actions .maps-action{grid-column:1/-1;background:linear-gradient(115deg,#e9c99a,#b48b5c)!important;color:#231810!important;border-color:#e3bd86!important;justify-content:space-between!important;padding-inline:20px!important}
+.luxe-contact-actions .maps-action .contact-action-icon{color:#281c13}
+@media(max-width:380px){.abaya-icon-btn{width:38px;min-width:38px;height:42px}.luxe-contact-actions .soft{font-size:12px!important;padding:9px 6px!important}.luxe-contact-actions .contact-action-icon{font-size:19px}}
+</style>
+
+<style id="assia-android-shop-camera-gps">
+.assia-inline-field{display:flex;align-items:stretch;gap:9px;min-width:0;width:100%}
+.assia-inline-field>input:not([type=file]){flex:1;min-width:0;width:0!important}
+.assia-inline-field .assia-field-icon{flex:0 0 48px;width:48px;min-height:48px;padding:10px!important;display:flex;align-items:center;justify-content:center;border:1px solid #ad8c61!important;border-radius:12px!important;background:#30251e!important;color:#f0d5a5!important;-webkit-text-fill-color:#f0d5a5!important;box-shadow:none!important}
+.assia-field-icon svg{width:23px;height:23px;display:block;pointer-events:none}
+.assia-field-icon:disabled{opacity:.55}
+.assia-field-help{font-size:12px;line-height:1.5;color:#e7cfaa;margin:3px 0 5px}
+.assia-field-help[hidden]{display:none!important}
+</style></head>
+<body>
+<header><div class="head"><div class="brand"><h1 class="brand-heading">Gestion Abayas <span>by Assia Collection</span></h1></div><div class="head-controls"></div></div></header>
+<main><div class="panel" id="sync-status" role="status" hidden></div><div class="panel" id="sync-retry-panel" hidden><button type="button" id="retry-sync" hidden>Réessayer</button></div><nav class="page-nav" aria-label="Navigation en haut"><span id="page-counter-top" class="page-counter" aria-live="polite">Ajouter une nouvelle collection</span><button type="button" class="plus" id="add" aria-label="Créer une nouvelle page">+</button></nav><div id="lists"></div><nav class="page-nav" aria-label="Navigation entre les listes"><button id="prev-page" aria-label="Page précédente">‹</button><span id="page-counter" class="page-counter" aria-live="polite"></span><button id="next-page" aria-label="Page suivante">›</button></nav><div class="bottom-quit"><button type="button" class="quit-app" id="quit-app" aria-label="Réinitialiser cette liste">Réinitialiser cette liste</button></div></main>
+<footer>Vos collections sont enregistrées sur cet appareil. Pensez à exporter vos fiches régulièrement pour en conserver une copie. Sur iPhone, utilisez Safari et « Enregistrer dans Fichiers » pour vos documents.</footer>
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+ <div class="dialog"><h3 id="modal-title">Confirmation</h3><p id="modal-text"></p><div id="modal-extra"></div><div class="row"><button id="modal-cancel" class="grow">Annuler</button><button id="modal-ok" class="ok grow">Confirmer</button></div></div>
+</div>
+<script>
+window.APP_CSRF = "";
+const SIZES=["52","54","56","58","60","62"];
+const fresh=(id)=>({id,name:"",draft:"",locked:false,photo:"",contact:"",image:"",quantities:Object.fromEntries(SIZES.map(s=>[s,0])),price:null,priceDraft:"",priceLocked:false,depositEnabled:false,depositAmount:"",depositLocked:false,depositDraft:""});
+let lists=[fresh(1)];
+let revision=0;
+let pendingSave=false, saving=false, saveTimer=null, lastSaveError=false;
+const statusText=(s)=>{const el=document.getElementById("sync-status");if(!el)return;el.hidden=!lastSaveError;el.textContent=s;const retry=document.getElementById("sync-retry-panel");if(retry)retry.hidden=!lastSaveError};
+const STORAGE_KEY="gestion-abayas-html-local-v1";
+async function loadRemote(){
+ try{
+  const stored=localStorage.getItem(STORAGE_KEY);
+  if(stored){const parsed=JSON.parse(stored);if(Array.isArray(parsed)&&parsed.length)lists=parsed;}
+ }catch(err){lastSaveError=true;statusText("Sauvegarde indisponible dans ce contexte. Exporte tes fiches avant de fermer. "+err.message)}
+ lists.forEach(l=>{l.quantities=l.quantities||{};for(const size of SIZES){if(l.quantities[size]==null)l.quantities[size]=0}l.closed=false;l.depositEnabled=Boolean(l.depositEnabled);l.depositAmount=String(l.depositAmount??"");l.depositLocked=Boolean(l.depositLocked);l.depositDraft=l.depositLocked?l.depositAmount:String(l.depositDraft??l.depositAmount)});
+ nextId=Math.max(...lists.map(x=>Number(x.id)||0))+1;
+ render();if(!lastSaveError)statusText(" Fiches chargées depuis ce téléphone");
+}
+async function flushSave(){
+ if(!pendingSave)return;
+ pendingSave=false;
+ try{localStorage.setItem(STORAGE_KEY,JSON.stringify(lists));lastSaveError=false;statusText(" Enregistré sur ce téléphone")}
+ catch(err){lastSaveError=true;pendingSave=true;statusText(" Enregistrement local impossible : "+err.message);document.getElementById("retry-sync").hidden=false}
+}
+function queueSave(){clearTimeout(saveTimer);saveTimer=setTimeout(flushSave,250)}
+lists.forEach(l=>{l.quantities=l.quantities||{};for(const size of SIZES){if(l.quantities[size]==null)l.quantities[size]=0}l.closed=false;l.depositEnabled=Boolean(l.depositEnabled);l.depositAmount=String(l.depositAmount??"");l.depositLocked=Boolean(l.depositLocked);l.depositDraft=l.depositLocked?l.depositAmount:String(l.depositDraft??l.depositAmount)});
+let nextId=Math.max(...lists.map(x=>x.id||0))+1;
+let activeIndex=0;
+
+let slideDirection="right";
+let modalAction=null;
+const $=s=>document.querySelector(s);
+const escapeHTML=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=n=>new Intl.NumberFormat("fr-FR",{minimumFractionDigits:2,maximumFractionDigits:2}).format(n)+" AED";
+const total=l=>SIZES.reduce((a,s)=>a+(Number(l.quantities[s])||0),0);
+const deposit=l=>l.depositEnabled?Math.max(0,Number(l.depositAmount)||0):0;
+const amountDue=l=>Math.max(0,(Number(l.price)||0)*total(l)-deposit(l));
+const sellerRefund=l=>l.price==null?0:Math.max(0,Math.round((deposit(l)-(Number(l.price)||0)*total(l))*100)/100);
+const contactPrefix="CONTACT_V2:";
+function readContact(raw){
+ const value=String(raw??"");
+ if(value.startsWith(contactPrefix)){
+  try{const o=JSON.parse(value.slice(contactPrefix.length));return {nom:String(o.nom||""),numero:String(o.numero||""),whatsapp:String(o.whatsapp||""),boutique:String(o.boutique||""),localisation:String(o.localisation||""),photoBoutique:String(o.photoBoutique||"")}}catch(e){}
+ }
+ return {nom:value,numero:"",whatsapp:"",boutique:"",localisation:"",photoBoutique:""};
+}
+function contactSummary(raw){
+ const c=readContact(raw);
+ return [["Nom",c.nom],["WhatsApp",c.whatsapp],["Boutique",c.boutique],["Localisation",c.localisation]].map(([label,value])=>`<div class="contact-detail-line"><strong>${label} :</strong> <span>${escapeHTML(value||"—")}</span></div>`).join("")+(c.photoBoutique?`<div class="contact-detail-line"><strong>Photo de la boutique :</strong><div><img src="${escapeHTML(c.photoBoutique)}" alt="Photo de la boutique" style="display:block;max-width:100%;max-height:260px;object-fit:contain;border-radius:10px;margin-top:8px"></div></div>`:"");
+}
+function hasContact(raw){const c=readContact(raw);return Boolean(c.nom||c.numero||c.whatsapp||c.boutique||c.localisation||c.photoBoutique)}
+function mapsLink(loc){
+ const v=String(loc||"").trim();
+ if(!v)return "";
+ if(/^https:\/\/(www\.)?(google\.[a-z.]+\/maps|maps\.google\.[a-z.]+|maps\.app\.goo\.gl)\//i.test(v))return v;
+ return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(v);
+}
+function saveWhatsAppContact(raw){
+ const c=readContact(raw);
+ const number=String(c.whatsapp||"").replace(/[^+0-9]/g,"");
+ if(!number){alert("Ajoute d’abord un numéro WhatsApp.");return}
+ const clean=v=>String(v||"").replace(/\\/g,"\\\\").replace(/\r?\n/g," ").replace(/[,;]/g," ");
+ const card=["BEGIN:VCARD","VERSION:3.0","FN:"+clean(c.nom||c.boutique||"Contact Abaya"),"TEL;TYPE=CELL:"+number,c.boutique?"ORG:"+clean(c.boutique):"",c.localisation?"ADR;TYPE=WORK:;;"+clean(c.localisation)+";;;;":"", "END:VCARD"].filter(Boolean).join("\r\n");
+ const blob=new Blob([card],{type:"text/vcard;charset=utf-8"});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");a.href=url;a.download="contact-abaya.vcf";document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),30000);
+
+}
+const COUNTRY_DIALS=[["AF","Afghanistan","+93"],["ZA","Afrique du Sud","+27"],["AL","Albanie","+355"],["DZ","Algérie","+213"],["DE","Allemagne","+49"],["AO","Angola","+244"],["AI","Anguilla","+1264"],["AG","Antigua-et-Barbuda","+1268"],["SA","Arabie saoudite","+966"],["AR","Argentine","+54"],["AM","Arménie","+374"],["AW","Aruba","+297"],["AU","Australie","+61"],["AT","Autriche","+43"],["AZ","Azerbaïdjan","+994"],["BS","Bahamas","+1242"],["BH","Bahreïn","+973"],["BD","Bangladesh","+880"],["BB","Barbade","+1246"],["BE","Belgique","+32"],["BZ","Belize","+501"],["BM","Bermudes","+1441"],["BT","Bhoutan","+975"],["BY","Biélorussie","+375"],["BO","Bolivie","+591"],["BQ","Bonaire, Saint-Eustache et Saba","+599"],["BA","Bosnie-Herzégovine","+387"],["BW","Botswana","+267"],["BN","Brunei","+673"],["BR","Brésil","+55"],["BG","Bulgarie","+359"],["BF","Burkina Faso","+226"],["BI","Burundi","+257"],["BJ","Bénin","+229"],["KH","Cambodge","+855"],["CM","Cameroun","+237"],["CA","Canada","+1"],["CV","Cap-Vert","+238"],["CL","Chili","+56"],["CN","Chine","+86"],["CY","Chypre","+357"],["CO","Colombie","+57"],["KM","Comores","+269"],["CG","Congo-Brazzaville","+242"],["CD","Congo-Kinshasa","+243"],["KP","Corée du Nord","+850"],["KR","Corée du Sud","+82"],["CR","Costa Rica","+506"],["HR","Croatie","+385"],["CU","Cuba","+53"],["CW","Curaçao","+599"],["CI","Côte d’Ivoire","+225"],["DK","Danemark","+45"],["DJ","Djibouti","+253"],["DM","Dominique","+1767"],["ES","Espagne","+34"],["EE","Estonie","+372"],["SZ","Eswatini","+268"],["FJ","Fidji","+679"],["FI","Finlande","+358"],["FR","France","+33"],["GA","Gabon","+241"],["GM","Gambie","+220"],["GH","Ghana","+233"],["GI","Gibraltar","+350"],["GD","Grenade","+1473"],["GL","Groenland","+299"],["GR","Grèce","+30"],["GP","Guadeloupe","+590"],["GU","Guam","+1671"],["GT","Guatemala","+502"],["GG","Guernesey","+44"],["GN","Guinée","+224"],["GQ","Guinée équatoriale","+240"],["GW","Guinée-Bissau","+245"],["GY","Guyana","+592"],["GF","Guyane française","+594"],["GE","Géorgie","+995"],["GS","Géorgie du Sud-et-les Îles Sandwich du Sud","+500"],["HT","Haïti","+509"],["HN","Honduras","+504"],["HU","Hongrie","+36"],["IN","Inde","+91"],["ID","Indonésie","+62"],["IQ","Irak","+964"],["IR","Iran","+98"],["IE","Irlande","+353"],["IS","Islande","+354"],["IL","Israël","+972"],["IT","Italie","+39"],["JM","Jamaïque","+1876"],["JP","Japon","+81"],["JE","Jersey","+44"],["JO","Jordanie","+962"],["KZ","Kazakhstan","+76"],["KE","Kenya","+254"],["KG","Kirghizstan","+996"],["KI","Kiribati","+686"],["XK","Kosovo","+383"],["KW","Koweït","+965"],["RE","La Réunion","+262"],["LA","Laos","+856"],["LS","Lesotho","+266"],["LV","Lettonie","+371"],["LB","Liban","+961"],["LR","Liberia","+231"],["LY","Libye","+218"],["LI","Liechtenstein","+423"],["LT","Lituanie","+370"],["LU","Luxembourg","+352"],["MK","Macédoine du Nord","+389"],["MG","Madagascar","+261"],["MY","Malaisie","+60"],["MW","Malawi","+265"],["MV","Maldives","+960"],["ML","Mali","+223"],["MT","Malte","+356"],["MA","Maroc","+212"],["MQ","Martinique","+596"],["MU","Maurice","+230"],["MR","Mauritanie","+222"],["YT","Mayotte","+262"],["MX","Mexique","+52"],["FM","Micronésie","+691"],["MD","Moldavie","+373"],["MC","Monaco","+377"],["MN","Mongolie","+976"],["MS","Montserrat","+1664"],["ME","Monténégro","+382"],["MZ","Mozambique","+258"],["NA","Namibie","+264"],["NR","Nauru","+674"],["NI","Nicaragua","+505"],["NE","Niger","+227"],["NG","Nigeria","+234"],["NU","Niue","+683"],["NO","Norvège","+47"],["NC","Nouvelle-Calédonie","+687"],["NZ","Nouvelle-Zélande","+64"],["NP","Népal","+977"],["OM","Oman","+968"],["UG","Ouganda","+256"],["UZ","Ouzbékistan","+998"],["PK","Pakistan","+92"],["PW","Palaos","+680"],["PS","Palestine","+970"],["PA","Panama","+507"],["PG","Papouasie-Nouvelle-Guinée","+675"],["PY","Paraguay","+595"],["NL","Pays-Bas","+31"],["PH","Philippines","+63"],["PL","Pologne","+48"],["PF","Polynésie française","+689"],["PR","Porto Rico","+1787"],["PT","Portugal","+351"],["PE","Pérou","+51"],["QA","Qatar","+974"],["HK","R.A.S. chinoise de Hong Kong","+852"],["MO","R.A.S. chinoise de Macao","+853"],["RO","Roumanie","+40"],["GB","Royaume-Uni","+44"],["RU","Russie","+7"],["RW","Rwanda","+250"],["CF","République centrafricaine","+236"],["DO","République dominicaine","+1809"],["EH","Sahara occidental","+212"],["KN","Saint-Christophe-et-Niévès","+1869"],["SM","Saint-Marin","+378"],["SX","Saint-Martin (partie néerlandaise)","+1"],["PM","Saint-Pierre-et-Miquelon","+508"],["VC","Saint-Vincent-et-les Grenadines","+1784"],["SH","Sainte-Hélène","+290"],["LC","Sainte-Lucie","+1758"],["SV","Salvador","+503"],["WS","Samoa","+685"],["AS","Samoa américaines","+1684"],["ST","Sao Tomé-et-Principe","+239"],["RS","Serbie","+381"],["SC","Seychelles","+248"],["SL","Sierra Leone","+232"],["SG","Singapour","+65"],["SK","Slovaquie","+421"],["SI","Slovénie","+386"],["SO","Somalie","+252"],["SD","Soudan","+249"],["SS","Soudan du Sud","+211"],["LK","Sri Lanka","+94"],["CH","Suisse","+41"],["SR","Suriname","+597"],["SE","Suède","+46"],["SJ","Svalbard et Jan Mayen","+4779"],["SY","Syrie","+963"],["SN","Sénégal","+221"],["TJ","Tadjikistan","+992"],["TZ","Tanzanie","+255"],["TW","Taïwan","+886"],["TD","Tchad","+235"],["CZ","Tchéquie","+420"],["IO","Territoire britannique de l’océan Indien","+246"],["TH","Thaïlande","+66"],["TL","Timor oriental","+670"],["TG","Togo","+228"],["TK","Tokelau","+690"],["TO","Tonga","+676"],["TT","Trinité-et-Tobago","+1868"],["TN","Tunisie","+216"],["TM","Turkménistan","+993"],["TR","Turquie","+90"],["TV","Tuvalu","+688"],["UA","Ukraine","+380"],["UY","Uruguay","+598"],["VU","Vanuatu","+678"],["VE","Venezuela","+58"],["VN","Viêt Nam","+84"],["WF","Wallis-et-Futuna","+681"],["YE","Yémen","+967"],["ZM","Zambie","+260"],["ZW","Zimbabwe","+263"],["EG","Égypte","+20"],["AE","Émirats arabes unis","+971"],["EC","Équateur","+593"],["ER","Érythrée","+291"],["US","États-Unis","+1"],["ET","Éthiopie","+251"],["CX","Île Christmas","+61"],["IM","Île de Man","+44"],["NF","Île Norfolk","+672"],["KY","Îles Caïmans","+1345"],["CC","Îles Cocos","+61"],["CK","Îles Cook","+682"],["FO","Îles Féroé","+298"],["FK","Îles Malouines","+500"],["MP","Îles Mariannes du Nord","+1670"],["MH","Îles Marshall","+692"],["PN","Îles Pitcairn","+64"],["SB","Îles Salomon","+677"]];
+function countryFlag(code){
+ const iso=String(code||"AE").toUpperCase();
+ if(!/^[A-Z]{2}$/.test(iso))return "🌐";
+ return String.fromCodePoint(...Array.from(iso,ch=>127397+ch.charCodeAt(0)));
+}
+function dialForCountry(code){return (COUNTRY_DIALS.find(c=>c[0]===code)||COUNTRY_DIALS.find(c=>c[0]==="AE"))[2]}
+function splitWhatsApp(raw){
+ const value=String(raw||"").trim();
+ const matched=COUNTRY_DIALS.filter(c=>value.startsWith(c[2])).sort((a,b)=>b[2].length-a[2].length);
+ const country=matched.find(c=>c[0]==="AE")||matched[0];
+ return country?{country:country[0],local:value.slice(country[2].length).trim()}:{country:"AE",local:value};
+}
+function phoneWithPrefix(){
+ const country=document.getElementById("contact-country")?.value||"AE";
+ const local=String(document.getElementById("contact-whatsapp")?.value||"").trim().replace(/^0+(?=\d)/,"");
+ return local?dialForCountry(country)+" "+local:"";
+}
+let assiaOcrLoader;
+async function assiaReadShopPhoto(file){
+ // Reconnaissance multilingue : conserve l'écriture arabe et les chiffres d'origine.
+ if(!assiaOcrLoader){assiaOcrLoader=new Promise((resolve,reject)=>{
+  if(window.Tesseract){resolve(window.Tesseract);return;}
+  const script=document.createElement("script");script.src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js";
+  script.onload=()=>window.Tesseract?resolve(window.Tesseract):reject(new Error("Reconnaissance indisponible."));
+  script.onerror=()=>reject(new Error("Connexion Internet nécessaire pour lire le texte de la photo."));
+  document.head.appendChild(script);
+ }).catch(err=>{assiaOcrLoader=null;throw err;});}
+ const engine=await assiaOcrLoader;
+ // L'agrandissement facilite la lecture des petites enseignes, sans altérer le fichier original.
+ let source=file;
+ try{
+  const bitmap=await createImageBitmap(file);
+  const factor=Math.min(3,Math.max(1,1900/Math.max(bitmap.width,bitmap.height)));
+  const canvas=document.createElement("canvas");canvas.width=Math.round(bitmap.width*factor);canvas.height=Math.round(bitmap.height*factor);
+  const ctx=canvas.getContext("2d",{willReadFrequently:true});ctx.fillStyle="#ffffff";ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.filter="contrast(125%)";ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);bitmap.close();source=canvas;
+ }catch(_e){source=file;}
+ // Deux lectures séparées évitent que les alphabets se parasitent.
+ const latin=await engine.recognize(source,"deu+fra+eng");
+ const latinText=String(latin.data.text||"").replace(/\r/g,"").trim();
+ const latinChoice=assiaBestShopLine(latinText,"latin");
+ if(latinChoice && latinChoice.confident)return {choice:latinChoice,raw:latinText};
+ const arabic=await engine.recognize(source,"ara");
+ const arabicText=String(arabic.data.text||"").replace(/\r/g,"").trim();
+ const arabicChoice=assiaBestShopLine(arabicText,"arabic");
+ const candidates=[latinChoice,arabicChoice].filter(Boolean).sort((x,y)=>y.score-x.score);
+ return {choice:candidates[0]||null,raw:[latinText,arabicText].filter(Boolean).join("\n---\n")};
+}
+function assiaShopLines(text){
+ // Ne garder que les lettres Unicode, les chiffres et les espaces réellement reconnus.
+ return String(text||"").split(/\r?\n/).map(v=>v.replace(/[^\p{L}\p{N}\s]/gu," ").replace(/\s+/g," ").trim()).filter(Boolean);
+}
+function assiaBestShopLine(text,mode){
+ const lines=assiaShopLines(text);
+ const results=[];
+ for(const line of lines){
+  const latin=(line.match(/[A-Za-zÀ-ÖØ-öø-ÿ]/g)||[]).length;
+  const arabic=(line.match(/[\u0621-\u064A\u0671-\u06D3]/g)||[]).length;
+  const digits=(line.match(/[0-9\u0660-\u0669\u06F0-\u06F9]/g)||[]).length;
+  const chars=Array.from(line.replace(/\s/g,"")).length;
+  const words=line.split(/\s+/).length;
+  const alphabet=mode==="latin"?latin:arabic;
+  // Ne pas accepter une suite de caractères incohérente ou trop longue.
+  if(chars<2||chars>45||words>7||alphabet===0||
+     (latin>0&&arabic>0&&Math.min(latin,arabic)>1))continue;
+  const score=alphabet*2+Math.min(digits,8)-Math.max(0,words-4)*4;
+  results.push({line,score,confident:chars<=35&&words<=6});
+ }
+ return results.sort((a,b)=>b.score-a.score)[0]||null;
+}
+function contactPopup(l){
+ const c=readContact(l.contact);
+ const currentPhone=splitWhatsApp(c.whatsapp);
+ ask("Contact","Complète les informations, puis choisis OK ou Annuler.",(_password,_field,data)=>{
+  const updated={...data,numero:c.numero};
+  patch(l.id,{contact:contactPrefix+JSON.stringify(updated)});
+  if(updated.whatsapp && (updated.whatsapp!==c.whatsapp || updated.nom!==c.nom)){
+   saveWhatsAppContact(contactPrefix+JSON.stringify(updated));
+  }
+ },`<div class="contact-fields">
+ <label for="contact-nom">Nom du vendeur :</label><input id="contact-nom" type="text" value="${escapeHTML(c.nom)}">
+ <label for="contact-country">Pays / indicatif WhatsApp :</label><select id="contact-country" aria-label="Choisir le pays">${COUNTRY_DIALS.map(([code,name,dial])=>`<option value="${code}" ${currentPhone.country===code?"selected":""}>${countryFlag(code)} ${escapeHTML(name)} (${dial})</option>`).join("")}</select>
+ <label for="contact-whatsapp">Numéro WhatsApp :</label><div class="phone-row"><span id="phone-prefix" aria-label="Indicatif">${countryFlag(currentPhone.country)} ${dialForCountry(currentPhone.country)}</span><input id="contact-whatsapp" type="tel" inputmode="numeric" enterkeyhint="done" value="${escapeHTML(currentPhone.local)}" placeholder="Numéro sans indicatif"></div><label for="contact-boutique">Boutique :</label><div class="assia-inline-field"><input id="contact-boutique" type="text" value="${escapeHTML(c.boutique)}" placeholder="Nom facultatif"><button type="button" id="contact-shop-photo" class="assia-field-icon" aria-label="Prendre une photo de la boutique" title="Prendre une photo, sans transcription"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h4l2-2h4l2 2h4v12H4z"/><circle cx="12" cy="13" r="3.3"/></svg></button><input type="file" id="contact-shop-image" accept="image/*" capture="environment" hidden></div><p class="assia-field-help" id="contact-shop-help" aria-live="polite" hidden></p><input type="hidden" id="contact-shop-photo-data" value="${escapeHTML(c.photoBoutique)}"><div id="contact-shop-preview" style="${c.photoBoutique?"":"display:none;"}margin:10px 0"><img id="contact-shop-preview-img" src="${escapeHTML(c.photoBoutique)}" alt="Photo de la boutique" style="max-width:100%;max-height:260px;object-fit:contain;border-radius:10px"><div><button type="button" id="contact-shop-remove" class="soft" style="margin-top:8px">Supprimer la photo</button></div></div>
+ <label for="contact-localisation">Localisation :</label><div class="assia-inline-field"><input id="contact-localisation" type="text" value="${escapeHTML(c.localisation)}" placeholder="Adresse ou coordonnées GPS"><button type="button" id="contact-gps" class="assia-field-icon" aria-label="Utiliser ma position GPS" title="Ma position"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></button></div>
+
+ 
+ <p class="muted" id="contact-location-help" hidden></p>
+ </div>`);
+ document.getElementById("modal-ok").textContent="OK";
+ document.getElementById("contact-country").addEventListener("change",e=>{document.getElementById("phone-prefix").textContent=countryFlag(e.target.value)+" "+dialForCountry(e.target.value)});
+ const showLocationHelp=(message)=>{
+  const info=document.getElementById("contact-location-help");
+  if(info){info.hidden=false;info.textContent=message+" Vérifie que Safari est autorisé à utiliser ta position. Tu peux aussi saisir une adresse manuellement."}
+ };
+ document.getElementById("contact-gps").onclick=()=>{
+  const btn=document.getElementById("contact-gps");
+  if(!window.isSecureContext){
+   showLocationHelp("La position GPS nécessite un contexte sécurisé. Ouvre cette application via un lien HTTPS dans Safari.");
+   return;
+  }
+  if(!navigator.geolocation){
+   showLocationHelp("La géolocalisation n’est pas disponible dans ce navigateur.");
+   return;
+  }
+  btn.disabled=true;btn.setAttribute("aria-label","Recherche GPS…");
+  navigator.geolocation.getCurrentPosition(p=>{
+   const input=document.getElementById("contact-localisation");
+   if(input)input.value=p.coords.latitude.toFixed(6)+", "+p.coords.longitude.toFixed(6);
+   const info=document.getElementById("contact-location-help");
+   if(info){info.hidden=false;info.textContent="Position obtenue. Appuie sur OK pour enregistrer cette localisation."}
+   btn.disabled=false;btn.setAttribute("aria-label","Ma position");
+  },err=>{
+   btn.disabled=false;btn.setAttribute("aria-label","Ma position");
+   const reason=err.code===1?"L’accès à la position a été refusé ou bloqué par le navigateur.":err.code===2?"Le téléphone n’a pas réussi à déterminer ta position.":err.code===3?"La recherche GPS a pris trop de temps.":"La position n’est pas disponible.";
+   showLocationHelp(reason+" Active la localisation dans les réglages Android et autorise ton navigateur à utiliser ta position.");
+  },{enableHighAccuracy:true,timeout:15000,maximumAge:30000});
+ };
+ document.getElementById("contact-shop-photo").addEventListener("click",()=>document.getElementById("contact-shop-image").click());
+ document.getElementById("contact-shop-remove").addEventListener("click",()=>{
+  document.getElementById("contact-shop-photo-data").value="";
+  document.getElementById("contact-shop-preview-img").removeAttribute("src");
+  document.getElementById("contact-shop-preview").style.display="none";
+  const help=document.getElementById("contact-shop-help");help.hidden=false;help.textContent="Photo supprimée. Appuie sur OK pour enregistrer.";
+ });
+ document.getElementById("contact-shop-image").addEventListener("change",async(e)=>{
+  const file=e.target.files&&e.target.files[0];if(!file)return;
+  const help=document.getElementById("contact-shop-help");help.hidden=false;
+  try{
+   if(!file.type.startsWith("image/"))throw new Error("Choisis une photo.");
+   const bitmap=await createImageBitmap(file);
+   const scale=Math.min(1,1000/Math.max(bitmap.width,bitmap.height));
+   const canvas=document.createElement("canvas");
+   canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+   canvas.getContext("2d").drawImage(bitmap,0,0,canvas.width,canvas.height);
+   if(bitmap.close)bitmap.close();
+   const data=canvas.toDataURL("image/jpeg",0.72);
+   document.getElementById("contact-shop-photo-data").value=data;
+   document.getElementById("contact-shop-preview-img").src=data;
+   document.getElementById("contact-shop-preview").style.display="block";
+   help.textContent="Photo ajoutée sans lecture de texte. Appuie sur OK pour l’enregistrer.";
+  }catch(err){help.textContent="Impossible de charger cette photo : "+(err.message||err);}
+  finally{e.target.value="";}
+ });
+}
+function save(){pendingSave=true;statusText("Enregistrement sur ce téléphone…");queueSave()}
+const EXPORT_LANG={
+ fr:{missing:"Non renseigné",missingF:"Non renseignée",date:"Date",abaya:"ABAYA",contact:"CONTACT",name:"Nom",shop:"Boutique",location:"Localisation",sizes:"TAILLES ET QUANTITÉS",size:"Taille",qty:"TOTAL DES QUANTITÉS",unit:"PRIX D'UNE ABAYA",value:"VALEUR TOTALE",deposit:"ACOMPTE",remaining:"RESTE À PAYER",refund:"MONTANT QUE LE VENDEUR DOIT ME RENDRE",notCalculated:"Non calculable",notApplied:"Non appliqué",collection:"FICHE DE COLLECTION",edited:"Édité le",summary:"Récapitulatif financier",photo:"PHOTO DE L’ABAYA",document:"Document récapitulatif",totalQty:"QUANTITÉ TOTALE",unitShort:"PRIX UNITAIRE"},
+ en:{missing:"Not provided",missingF:"Not provided",date:"Date",abaya:"ABAYA",contact:"CONTACT",name:"Name",shop:"Shop",location:"Location",sizes:"SIZES AND QUANTITIES",size:"Size",qty:"TOTAL QUANTITY",unit:"PRICE PER ABAYA",value:"TOTAL VALUE",deposit:"DEPOSIT",remaining:"BALANCE DUE",refund:"AMOUNT THE SELLER MUST REFUND ME",notCalculated:"Not available",notApplied:"Not applied",collection:"COLLECTION SUMMARY",edited:"Issued on",summary:"Financial summary",photo:"ABAYA PHOTO",document:"Collection summary",totalQty:"TOTAL QUANTITY",unitShort:"UNIT PRICE"}
+};
+function exportLines(l,lang="fr"){
+ const t=EXPORT_LANG[lang]||EXPORT_LANG.fr;
+ const name=(l.locked?l.name:l.draft)||l.name||t.missing;
+ const price=l.priceLocked?l.price:(l.priceDraft!==""&&Number.isFinite(Number(l.priceDraft))?Number(l.priceDraft):l.price);
+ const c=readContact(l.contact);
+ return [t.date+" : "+new Date().toLocaleString(lang==="en"?"en-GB":"fr-FR"),"",t.abaya+" : "+name,"",t.contact,t.name+" : "+(c.nom||t.missing),"WhatsApp : "+(c.whatsapp||t.missing),t.shop+" : "+(c.boutique||t.missingF),t.location+" : "+(c.localisation||t.missingF),"",t.sizes,...SIZES.map(size=>t.size+" "+size+" : "+(Number(l.quantities[size])||0)),"",t.qty+" : "+total(l),t.unit+" : "+(price==null?t.missing:money(price)),t.value+" : "+(price==null?t.notCalculated:money(price*total(l))),t.deposit+" : "+(l.depositEnabled?money(deposit(l)):t.notApplied),t.remaining+" : "+(price==null?t.notCalculated:money(Math.max(0,price*total(l)-deposit(l)))),...(price!=null&&l.depositEnabled&&deposit(l)>price*total(l)?[t.refund+" : "+money(deposit(l)-price*total(l))]:[])];
+}
+function exportFilename(l,ext,lang="fr"){
+ const raw=String((l.locked?l.name:l.draft)||l.name||"Abaya").trim();
+ const name=raw.replace(/[\\/:*?<>|"\x00-\x1F]/g," ").replace(/\s+/g," ").trim().slice(0,75)||"Abaya";
+ return 'COLLECTION "'+name+'".'+ext;
+}
+function exportText(l,lang="fr"){return new File(["\uFEFF"+exportLines(l,lang).join("\r\n")],exportFilename(l,"txt",lang),{type:"text/plain"});}
+function loadPhoto(src){return new Promise(resolve=>{if(!src)return resolve(null);const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>resolve(null);im.src=src;});}
+async function exportPDF(l,lang="fr"){
+ const t=EXPORT_LANG[lang]||EXPORT_LANG.fr;
+ const canvas=document.createElement("canvas");canvas.width=1240;canvas.height=1754;
+ const ctx=canvas.getContext("2d");const W=1240,H=1754;
+ ctx.fillStyle="#fff";ctx.fillRect(0,0,W,H);
+ const name=String((l.locked?l.name:l.draft)||l.name||t.missing).trim();
+ const c=readContact(l.contact);
+ const price=l.priceLocked?l.price:(l.priceDraft!==""&&Number.isFinite(Number(l.priceDraft))?Number(l.priceDraft):l.price);
+ const count=total(l),value=price==null?null:price*count,remaining=value==null?null:Math.max(0,value-deposit(l)),refund=value==null?0:Math.max(0,deposit(l)-value);
+ const green="#173c32",ink="#24332e",muted="#66766f",line="#dfe7e2",light="#f5f7f4",gold="#b79b6a";
+ const rect=(x,y,w,h,color)=>{ctx.fillStyle=color;ctx.fillRect(x,y,w,h)};
+ const rounded=(x,y,w,h,r,color)=>{ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()};
+ const txt=(v,x,y,size=25,color=ink,bold=false,align="left")=>{ctx.fillStyle=color;ctx.font=(bold?"bold ":"")+size+"px Arial";ctx.textAlign=align;ctx.fillText(String(v),x,y);ctx.textAlign="left"};
+ const wrap=(v,x,y,maxWidth,size=23,color=ink,bold=false,lineHeight=33,maxLines=2)=>{
+  ctx.font=(bold?"bold ":"")+size+"px Arial";const words=String(v||"—").split(/\s+/);let current="",n=0;
+  for(let i=0;i<words.length;i++){const word=words[i],test=current?current+" "+word:word;
+   if(ctx.measureText(test).width>maxWidth&&current){txt(current,x,y,size,color,bold);y+=lineHeight;n++;current=word;if(n>=maxLines){if(i<words.length-1){let ell=current;while(ell.length>1&&ctx.measureText(ell+"…").width>maxWidth)ell=ell.slice(0,-1);txt(ell+"…",x,y,size,color,bold)}else txt(current,x,y,size,color,bold);return y+lineHeight}}
+   else current=test;
+  }if(current){txt(current,x,y,size,color,bold);y+=lineHeight;}return y;
+ };
+ // En-tête premium : titre de la collection et date.
+ rect(0,0,W,17,gold);rect(0,17,W,252,green);
+ txt(t.collection,70,82,21,"#d8e7df",true);
+ wrap(name,70,163,1080,51,"#ffffff",true,59,2);
+ txt(t.edited+" "+new Date().toLocaleDateString(lang==="en"?"en-GB":"fr-FR"),72,230,22,"#d8e7df");
+ // Deux colonnes : coordonnées et photo, avec emplacement réservé.
+ const photo=await loadPhoto(l.image);
+ const photoX=817,photoY=322,photoW=350,photoH=410;
+ rounded(70,302,1100,460,17,light);
+ txt(t.contact,96,352,25,green,true);
+ rect(96,371,685,2,line);
+ let y=415;
+ const info=[[t.name,c.nom],["WhatsApp",c.whatsapp],[t.shop,c.boutique],[t.location,c.localisation]];
+ for(const [label,val] of info){
+  txt(label.toUpperCase(),96,y,18,muted,true);
+  y=wrap(val||t.missing,96,y+33,685,23,ink,false,30,label===t.location?3:2)+25;
+ }
+ rounded(photoX,photoY,photoW,photoH,12,"#e6ece8");
+ if(photo){
+  const scale=Math.min(photoW/photo.width,photoH/photo.height);
+  const pw=photo.width*scale,ph=photo.height*scale;
+  ctx.drawImage(photo,photoX+(photoW-pw)/2,photoY+(photoH-ph)/2,pw,ph);
+ }else{
+  txt(t.photo,photoX+photoW/2,photoY+photoH/2,22,muted,true,"center");
+ }
+ // Tableau des tailles.
+ txt(t.sizes,70,835,29,green,true);
+ rect(70,854,1100,2,gold);
+ const cellW=1100/SIZES.length;
+ SIZES.forEach((size,i)=>{
+  const x=70+i*cellW;
+  rounded(x+3,883,cellW-9,125,9,i%2===0?"#f0f5f1":"#f8faf8");
+  txt(String(size),x+cellW/2,928,27,muted,true,"center");
+  txt(String(Number(l.quantities[size])||0),x+cellW/2,982,39,green,true,"center");
+ });
+ // Récapitulatif financier : libellés à gauche, valeurs alignées à droite.
+ txt(t.summary,70,1085,29,green,true);
+ rect(70,1104,1100,2,gold);
+ const amounts=[[t.totalQty,String(count)],[t.unitShort,price==null?t.missing:money(price)],[t.value,value==null?t.notCalculated:money(value)],[t.deposit,l.depositEnabled?money(deposit(l)):t.notApplied]];
+ let fy=1164;
+ for(let i=0;i<amounts.length;i++){
+  if(i%2===0)rounded(70,fy-38,1100,67,7,light);
+  txt(amounts[i][0],93,fy,24,muted);
+  txt(amounts[i][1],1142,fy,27,ink,true,"right");
+  fy+=75;
+ }
+ rounded(70,1480,1100,115,13,green);
+ txt(t.remaining,98,1550,26,"#ffffff",true);
+ txt(remaining==null?t.notCalculated:money(remaining),1140,1551,38,"#ffffff",true,"right");
+  if(refund>0){rounded(70,1605,1100,74,9,"#f5ead6");txt(t.refund,90,1652,21,"#62411c",true);txt(money(refund),1140,1652,30,"#62411c",true,"right");}
+ rect(70,1698,1100,2,line);
+ wrap(name,72,1726,750,21,muted,false,26,1);
+ txt(t.document,1168,1726,20,muted,false,"right");
+ // PDF autonome : image JPEG de la page A4 intégrée au fichier PDF, sans service externe.
+ lastPDFPreview=canvas.toDataURL("image/jpeg",0.84);const jpeg=atob(lastPDFPreview.split(",")[1]);
+ const enc=new TextEncoder();let parts=[],offset=0,positions=[0];
+ const push=x=>{const bytes=typeof x==="string"?enc.encode(x):x;parts.push(bytes);offset+=bytes.length;};
+ const obj=(n,body)=>{positions[n]=offset;push(n+" 0 obj\n"+body+"\nendobj\n");};
+ push("%PDF-1.4\n");obj(1,"<< /Type /Catalog /Pages 2 0 R >>");obj(2,"<< /Type /Pages /Kids [3 0 R] /Count 1 >>");obj(3,"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /XObject << /Im1 4 0 R >> >> /Contents 5 0 R >>");
+ positions[4]=offset;push("4 0 obj\n<< /Type /XObject /Subtype /Image /Width 1240 /Height 1754 /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length "+jpeg.length+" >>\nstream\n");const bytes=new Uint8Array(jpeg.length);for(let i=0;i<jpeg.length;i++)bytes[i]=jpeg.charCodeAt(i);push(bytes);push("\nendstream\nendobj\n");
+ const content="q\n595 0 0 842 0 0 cm\n/Im1 Do\nQ\n";obj(5,"<< /Length "+enc.encode(content).length+" >>\nstream\n"+content+"endstream");
+ const xref=offset;push("xref\n0 6\n0000000000 65535 f \n");for(let i=1;i<=5;i++)push(String(positions[i]).padStart(10,"0")+" 00000 n \n");push("trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n"+xref+"\n%%EOF");
+ return new File(parts,exportFilename(l,"pdf",lang),{type:"application/pdf"});
+}
+async function downloadExport(file){
+ const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+ if(isIOS&&navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+  try{await navigator.share({files:[file]});return}catch(e){if(e.name==="AbortError")return}
+ }
+ const url=URL.createObjectURL(file);const a=document.createElement("a");a.href=url;a.download=file.name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);}
+async function shareExport(file){
+ try{if(navigator.share&&(!navigator.canShare||navigator.canShare({files:[file]}))){await navigator.share({files:[file]});return;}}
+ catch(e){if(e.name==="AbortError")return;}
+ alert("Le partage direct n’est pas disponible ici. Utilise Enregistrer sous, puis partage le document depuis Fichiers. Pour bénéficier du partage Safari, ouvre l’application via un lien HTTPS.");
+}
+let lastPDFPreview="";
+function exportOptions(l,format){
+ const isPDF=format==="pdf";
+ ask("Langue du fichier "+format.toUpperCase(),"Choisis la langue de ton document.",()=>{},
+ `<div class="export-language-choice"><button type="button" id="export-lang-fr" class="ok">Français</button><button type="button" id="export-lang-en" class="soft">English</button></div>`);
+ document.getElementById("modal-ok").hidden=true;
+ document.getElementById("export-lang-fr").onclick=()=>showExportPreview(l,format,"fr");
+ document.getElementById("export-lang-en").onclick=()=>showExportPreview(l,format,"en");
+}
+async function showExportPreview(l,format,lang){
+ const isPDF=format==="pdf", english=lang==="en";
+ const title=english?"File preview":"Aperçu du fichier";
+ ask(title+" "+format.toUpperCase(),english?"Preparing preview…":"Préparation de l’aperçu…",()=>{},
+ `<div id="export-preview" class="export-preview"><p class="muted">${english?"Generating file…":"Génération du fichier en cours…"}</p></div>
+ <div class="export-choice"><button type="button" id="export-save-choice" class="ok" disabled>${english?"Save as":"Enregistrer sous"}</button><button type="button" id="export-share-choice" class="soft" disabled>${english?"Share via…":"Envoyer via…"}</button></div>
+ <p class="muted">${english?"Sharing shows compatible apps installed on your phone.":"Le partage propose les applications compatibles installées sur ton téléphone."}</p>`);
+ document.getElementById("modal-ok").hidden=true;
+ document.querySelector("#modal .dialog").classList.add("export-dialog");
+ const preview=document.getElementById("export-preview");
+ const saveBtn=document.getElementById("export-save-choice");
+ const shareBtn=document.getElementById("export-share-choice");
+ try{
+  const file=isPDF?await exportPDF(l,lang):exportText(l,lang);
+  if(document.getElementById("export-preview")!==preview)return;
+  if(isPDF){
+   const img=document.createElement("img");img.src=lastPDFPreview;img.alt=english?"PDF preview":"Aperçu du PDF";img.className="export-pdf-preview";preview.replaceChildren(img);
+  }else{
+   const pre=document.createElement("pre");pre.className="export-txt-preview";
+   pre.textContent=(await file.text()).replace(/^\uFEFF/,"");preview.replaceChildren(pre);
+  }
+  document.getElementById("modal-text").textContent=english?"Review the file, then save or share it.":"Vérifie le contenu, puis enregistre ou partage ton fichier.";
+  saveBtn.disabled=false;shareBtn.disabled=false;
+  saveBtn.onclick=()=>downloadExport(file);shareBtn.onclick=()=>shareExport(file);
+ }catch(e){preview.textContent=(english?"File generation failed: ":"Impossible de générer le fichier : ")+(e.message||e);}
+}
+
+function patch(id,values){lists=lists.map(l=>l.id===id?{...l,...values}:l);save();render()}
+function ask(title,text,action,extra=""){modalAction=action;$("#modal-title").textContent=title;$("#modal-text").textContent=text;$("#modal-extra").innerHTML=extra;$("#modal").classList.remove("hidden")}
+function closeModal(){document.querySelector("#modal .dialog").classList.remove("export-dialog");document.getElementById("modal-ok").hidden=false;modalAction=null;$("#modal-ok").textContent="Confirmer";$("#modal").classList.add("hidden");$("#modal-extra").innerHTML=""}
+$("#modal-cancel").onclick=closeModal;$("#modal-ok").onclick=()=>{const password=$("#reset-password")?.value;const fieldValue=$("#modal-field")?.value;const contactData=document.getElementById("contact-nom")?{nom:$("#contact-nom").value.trim(),whatsapp:phoneWithPrefix(),boutique:$("#contact-boutique").value.trim(),localisation:$("#contact-localisation").value.trim(),photoBoutique:$("#contact-shop-photo-data").value}:null;const a=modalAction;closeModal();if(a)a(password,fieldValue,contactData)};
+function visibleLists(){return lists}
+function render(newListId=null){
+ const visible=visibleLists();
+ if(newListId!==null){activeIndex=visible.findIndex(l=>l.id===newListId);slideDirection="left";}
+ activeIndex=Math.max(0,Math.min(activeIndex,visible.length-1));
+ $("#lists").innerHTML=visible.map((l,index)=>`
+ <section class="list ${index===activeIndex?"active-page":""} ${index===activeIndex?"page-enter-"+slideDirection:""}" data-id="${l.id}">
+  ${l.id!==1?`<div class="page-actions"><span class="saved-note">Supprimer cette collection</span><button class="danger delete-list" title="Supprimer cette liste" aria-label="Supprimer cette liste" style="font-size:25px;min-width:44px">−</button></div>`:""}
+  <div class="field"><label class="label">NOM DE LA ABAYA :</label><div class="row abaya-name-row"><input class="grow name-input" type="text" value="${escapeHTML(l.draft)}" placeholder="Entrer le nom" ${l.locked?"disabled":""}><button class="ok name-ok" ${l.locked?"hidden":""}>OK</button>${l.locked?`<div class="abaya-name-tools"><button type="button" class="edit-name abaya-icon-btn" title="Modifier le nom" aria-label="Modifier le nom"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L9 17l-4 1 1-4Z"/></svg></button><button type="button" class="delete-name abaya-icon-btn abaya-icon-delete" title="Supprimer le nom" aria-label="Supprimer le nom"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 10v7M14 10v7"/></svg></button></div>`:""}</div>
+  ${l.locked?`<div class="abaya-locked-note"><span aria-hidden="true">♙</span> Nom validé et verrouillé <span class="abaya-locked-check" aria-hidden="true">✓</span></div>`:""}
+  </div>
+  <div class="panel">
+   <div class="field"><label class="label">PHOTO DE LA ABAYA</label><div class="photo-actions"><button class="ok camera"> Prendre une photo</button><button class="gallery">Choisir dans la galerie</button></div>
+   <input class="camera-input hidden" type="file" accept="image/*" capture="environment" aria-label="Prendre une photo avec l’appareil photo arrière"><input class="gallery-input hidden" type="file" accept="image/*">
+   ${l.image?`<div class="photo-preview-wrap"><img class="photo-preview" src="${l.image}" alt="Photo de la Abaya"><button type="button" class="danger remove-photo" aria-label="Supprimer la photo" title="Supprimer la photo"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 10v7"/><path d="M14 10v7"/></svg></button></div>`:`<div class="muted" style="margin-top:9px">Aucune photo ajoutée pour le moment.</div>`}</div>
+   <div class="field"><label class="label">CONTACT :</label>
+    ${hasContact(l.contact)?`<div class="contact-card">${contactSummary(l.contact)}</div><div class="contact-actions luxe-contact-actions"><button type="button" class="soft edit-contact"><span class="contact-action-icon" aria-hidden="true">✎</span><span>Modifier</span></button>${readContact(l.contact).whatsapp?`<button type="button" class="soft save-whatsapp"><span class="contact-action-icon" aria-hidden="true">♙</span><span>Enregistrer le contact</span></button>`:""}${readContact(l.contact).localisation?`<a class="soft maps-action" href="${escapeHTML(mapsLink(readContact(l.contact).localisation))}" target="_blank" rel="noopener noreferrer"><span class="contact-action-icon" aria-hidden="true">⌖</span><span>Voir sur Maps</span><span aria-hidden="true">↗</span></a>`:""}</div>`:
+    `<button type="button" class="contact-open" style="width:100%;text-align:left;min-height:48px">Ajouter un contact</button>`}
+   </div>
+  </div>
+  <hr><label class="label">TAILLES ET QUANTITÉS</label>
+  <div class="all-sizes-box"><label for="all-sizes-${l.id}" class="label">Même quantité pour toutes les tailles</label><div class="row"><input id="all-sizes-${l.id}" class="all-sizes-input" type="number" min="0" max="6" step="1" inputmode="numeric" enterkeyhint="done" placeholder="0–6" aria-label="Quantité de 0 à 6 pour toutes les tailles"><button type="button" class="ok apply-all-sizes">Appliquer</button></div></div>
+  <div class="sizes">
+   ${SIZES.map(s=>`<div class="size-card"><div class="size-title"><span>Taille ${s}</span><span class="muted">Qté : ${l.quantities[s]}</span></div><div class="choices">${[0,1,2,3,4,5,6].map(q=>`<button class="choice ${l.quantities[s]===q?"active":""}" data-size="${s}" data-q="${q}">${q}</button>`).join("")}</div></div>`).join("")}
+  </div>
+  <div class="panel"><label class="label">RÉCAPITULATIF</label><div class="muted">TOTAL DES QUANTITÉS</div><div class="total">${total(l)}</div><hr>
+   <label class="label">PRIX D'UNE ABAYA</label>
+   ${l.priceLocked?`<div class="row" style="justify-content:space-between"><strong>${money(l.price)}</strong><button class="soft edit-price">Modifier</button></div><div class="status"> Prix validé et verrouillé</div>`:
+   `<div class="row"><input class="grow price-input" type="number" min="0" step="0.01" inputmode="decimal" enterkeyhint="done" value="${escapeHTML(l.priceDraft)}" placeholder="Entrer le prix"><span>AED</span><button class="ok price-ok">OK</button></div>`}
+   <hr><div class="muted">VALEUR TOTALE</div><div class="grand">${money((l.price??0)*total(l))}</div>
+   <hr><label class="deposit-line"><input class="deposit-check" type="checkbox" ${l.depositEnabled?"checked":""}> Acompte</label>
+   <div class="deposit-amount ${l.depositEnabled?"":"hidden"}"><label class="label" for="deposit-${l.id}">MONTANT DE L’ACOMPTE (AED)</label>
+   ${l.depositLocked?`<div class="row" style="justify-content:space-between"><strong>${money(Number(l.depositAmount)||0)}</strong><button type="button" class="soft edit-deposit">Modifier</button></div><div class="status"> Acompte confirmé et verrouillé</div>`:`<div class="row"><input id="deposit-${l.id}" class="deposit-input grow" type="number" inputmode="decimal" enterkeyhint="done" min="0" step="0.01" value="${escapeHTML(l.depositDraft??l.depositAmount)}" placeholder="Montant de l’acompte"><span>AED</span><button type="button" class="ok deposit-ok">OK</button></div>`}
+   <p class="muted">L’acompte confirmé est déduit de la valeur totale.</p></div>
+   <hr><div class="muted">RESTE À PAYER</div><div class="due">${money(amountDue(l))}</div>${sellerRefund(l)>0?`<div class="seller-refund"><span>MONTANT QUE LE VENDEUR DOIT ME RENDRE</span><strong>${money(sellerRefund(l))}</strong></div>`:""}
+  </div>
+  <div class="export-actions"><button type="button" class="export-text"> Générer un document texte</button><button type="button" class="export-pdf" style="width:100%;margin-top:9px;background:#176b45;color:white;border:0;font-weight:700;padding:14px;border-radius:12px"> Générer un PDF</button></div>
+  <div style="margin-top:14px"><button class="danger reset"> Réinitialiser cette liste</button></div>
+ </section>`).join("");
+ document.querySelectorAll(".list").forEach(el=>bind(el,Number(el.dataset.id)));
+ $("#page-counter").textContent=`${activeIndex+1} / ${visible.length}`;$("#page-counter-top").textContent="Ajouter une nouvelle collection";
+ $("#prev-page").disabled=activeIndex===0;
+ $("#next-page").disabled=activeIndex===visible.length-1;
+}
+function bind(el,id){
+ const l=lists.find(x=>x.id===id);
+ const get=sel=>el.querySelector(sel);
+ if(get(".export-text"))get(".export-text").onclick=()=>exportOptions(l,"txt");
+ if(get(".export-pdf"))get(".export-pdf").onclick=()=>exportOptions(l,"pdf");
+ if(get(".close-page"))get(".close-page").onclick=()=>{
+  // Fermer réellement cette page : elle disparaît de la navigation, sans effacer ses données.
+  const previousIndex=activeIndex;
+  l.closed=true;
+  save();
+  activeIndex=Math.max(0,previousIndex-1);
+  slideDirection="left";
+  render();
+  window.scrollTo({top:0,behavior:"instant"});
+ };
+ if(get(".delete-list"))get(".delete-list").onclick=()=>{
+  ask("Supprimer cette liste ?","Saisis le mot de passe 1234 pour confirmer la suppression de cette liste uniquement.",(password)=>{
+   if(password!=="1234"){alert("Mot de passe incorrect. La liste n’a pas été supprimée.");return}
+   const deletedIndex=visibleLists().findIndex(item=>item.id===id);lists=lists.filter(item=>item.id!==id);if(deletedIndex<=activeIndex)activeIndex=Math.max(0,activeIndex-1);slideDirection="left";save();render();
+  },'<input id="reset-password" type="password" inputmode="numeric" placeholder="Mot de passe" style="width:100%;padding:12px;border:1px solid #cbd7ce;border-radius:10px">');
+ };
+ get(".name-input").addEventListener("input",e=>{const v=e.target.value.toUpperCase();e.target.value=v;l.draft=v;save()});
+ get(".name-ok").onclick=()=>{const v=l.draft.trim();if(!v)return;if(l.name&&l.name!==v)ask("Confirmer le changement de nom ?",`Remplacer « ${l.name} » par « ${v} » ?`,()=>patch(id,{name:v,locked:true}));else patch(id,{name:v,locked:true})};
+ if(get(".edit-name"))get(".edit-name").onclick=()=>ask("Modifier le nom ?","Souhaites-tu modifier le nom de cette abaya ?",()=>patch(id,{locked:false,draft:l.name}));
+ if(get(".delete-name"))get(".delete-name").onclick=()=>ask("Supprimer le nom ?","Le nom de cette abaya sera effacé. Les autres informations et la photo seront conservées.",()=>patch(id,{name:"",draft:"",locked:false}));
+ if(get(".contact-open"))get(".contact-open").onclick=()=>contactPopup(l);
+ if(get(".edit-contact"))get(".edit-contact").onclick=()=>ask("Confirmer la modification","Souhaites-tu modifier les informations de ce contact ?",()=>contactPopup(l));
+ if(get(".save-whatsapp"))get(".save-whatsapp").onclick=()=>saveWhatsAppContact(l.contact);
+ get(".camera").onclick=()=>get(".camera-input").click();
+ get(".gallery").onclick=()=>get(".gallery-input").click();
+ const handleFile=e=>{const file=e.target.files?.[0];if(!file)return;if(file.type&&!file.type.startsWith("image/")){alert("Choisis un fichier image.");return}if(file.size>12*1024*1024){alert("Photo trop volumineuse (maximum 12 Mo avant compression).");return}const reader=new FileReader();reader.onload=()=>{const img=new Image();img.onload=()=>{const scale=Math.min(1,900/Math.max(img.width,img.height));const canvas=document.createElement("canvas");canvas.width=Math.round(img.width*scale);canvas.height=Math.round(img.height*scale);canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);patch(id,{image:canvas.toDataURL("image/jpeg",.72)})};img.onerror=()=>alert("Impossible de lire cette photo. Essaie une image JPEG ou PNG.");img.src=reader.result};reader.onerror=()=>alert("Impossible de charger cette photo.");reader.readAsDataURL(file)};
+ get(".camera-input").onchange=handleFile;get(".gallery-input").onchange=handleFile;
+ if(get(".remove-photo"))get(".remove-photo").onclick=()=>ask("Supprimer la photo ?","La miniature sera retirée de cette liste.",()=>patch(id,{image:""}));
+ const allSizesInput=get(".all-sizes-input");
+ get(".apply-all-sizes").onclick=()=>{
+  const raw=allSizesInput.value.trim(),q=Number(raw);
+  if(raw===""||!Number.isInteger(q)||q<0||q>6){alert("Entre un nombre entier entre 0 et 6.");return;}
+  const quantities=Object.fromEntries(SIZES.map(size=>[size,q]));
+  patch(id,{quantities});
+ };
+ el.querySelectorAll(".choice").forEach(b=>b.onclick=()=>{const s=b.dataset.size,q=Number(b.dataset.q),old=l.quantities[s];if(q===old)return;ask("Confirmer la quantité ?",`Pour la taille ${s}, remplacer ${old} par ${q} ?`,()=>patch(id,{quantities:{...l.quantities,[s]:q}}))});
+ if(get(".price-input")){get(".price-input").oninput=e=>{l.priceDraft=e.target.value;save()};get(".price-ok").onclick=()=>{const v=l.priceDraft.trim(),p=Number(v);if(!v||!Number.isFinite(p)||p<0){alert("Entre un prix valide.");return}if(l.price!==null&&p!==l.price)ask("Confirmer le changement de prix ?",`Remplacer ${money(l.price)} par ${money(p)} ?`,()=>patch(id,{price:p,priceLocked:true}));else patch(id,{price:p,priceLocked:true})}}
+ if(get(".edit-price"))get(".edit-price").onclick=()=>patch(id,{priceDraft:String(l.price),priceLocked:false});
+ get(".deposit-check").onchange=e=>{
+  const enabled=e.target.checked;
+  if(l.depositLocked && enabled!==l.depositEnabled){
+   ask("Confirmer la modification de l’acompte ?",enabled?"Réactiver l’acompte enregistré ?":"Désactiver l’acompte ? Le reste à payer sera recalculé.",()=>patch(id,{depositEnabled:enabled}));
+   e.target.checked=l.depositEnabled;
+  }else patch(id,{depositEnabled:enabled});
+ };
+ if(get(".deposit-input"))get(".deposit-input").oninput=e=>{l.depositDraft=e.target.value;save()};
+ if(get(".deposit-ok"))get(".deposit-ok").onclick=()=>{
+  const raw=String(l.depositDraft??"").trim().replace(",",".");const value=Number(raw);
+  if(raw===""||!Number.isFinite(value)||value<0){alert("Entre un montant d’acompte valide.");return}
+  const update=()=>patch(id,{depositAmount:String(value),depositDraft:String(value),depositLocked:true});
+  if(l.depositAmount!=="" && Number(l.depositAmount)!==value)ask("Confirmer la modification de l’acompte ?",`Remplacer ${money(Number(l.depositAmount)||0)} par ${money(value)} ?`,update);
+  else update();
+ };
+ if(get(".edit-deposit"))get(".edit-deposit").onclick=()=>patch(id,{depositDraft:l.depositAmount,depositLocked:false});
+ get(".reset").onclick=()=>{modalAction=(val)=>{if(val==="1234"){const idx=lists.findIndex(x=>x.id===id);if(idx>=0)lists[idx]=fresh(id);save();render()}else{alert("Mot de passe incorrect.");}};$("#modal-title").textContent="Réinitialiser cette liste";$("#modal-text").textContent="Entre le mot de passe pour effacer uniquement cette liste.";$("#modal-extra").innerHTML='<input id="reset-password" type="password" inputmode="numeric" placeholder="Mot de passe" style="width:100%;padding:12px;border:1px solid #cbd7ce;border-radius:10px">';$("#modal").classList.remove("hidden")};
+}
+function goPage(delta){const next=activeIndex+delta;if(next<0||next>=visibleLists().length)return;activeIndex=next;slideDirection=delta>0?"right":"left";render();window.scrollTo({top:0,behavior:"instant"})}
+
+$("#prev-page").onclick=()=>goPage(-1);
+$("#next-page").onclick=()=>goPage(1);
+
+
+let touchStart=null;
+$("#lists").addEventListener("touchstart",e=>{if(e.touches.length!==1||e.target.closest("input,textarea,select,button,a"))return;touchStart={x:e.touches[0].clientX,y:e.touches[0].clientY}},{passive:true});
+$("#lists").addEventListener("touchend",e=>{if(!touchStart||!e.changedTouches.length)return;const dx=e.changedTouches[0].clientX-touchStart.x,dy=e.changedTouches[0].clientY-touchStart.y;touchStart=null;if(Math.abs(dx)>65&&Math.abs(dx)>Math.abs(dy)*1.5)goPage(dx<0?1:-1)},{passive:true});
+// La touche Terminé/OK du clavier Android valide les champs numériques.
+document.addEventListener("keydown",event=>{
+ if(event.key!=="Enter"||!event.target.matches('input[enterkeyhint="done"]'))return;
+ event.preventDefault();
+ const input=event.target;
+ if(input.classList.contains("price-input")){input.closest(".row")?.querySelector(".price-ok")?.click();}
+ else if(input.classList.contains("deposit-input")){input.closest(".row")?.querySelector(".deposit-ok")?.click();}
+ else if(input.classList.contains("all-sizes-input")){input.closest(".row")?.querySelector(".apply-all-sizes")?.click();}
+ else input.blur();
+});
+
+// Sauvegarder puis quitter l'application entière, et non la fiche Abaya.
+$("#quit-app").onclick=()=>{
+ const active=document.querySelector(".list.active-page .reset");
+ if(active)active.click();
+};
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden"&&pendingSave)flushSave()});
+window.addEventListener("pagehide",()=>{if(pendingSave){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(lists))}catch(e){}}});
+document.getElementById("retry-sync").onclick=()=>{lastSaveError=false;document.getElementById("retry-sync").hidden=true;flushSave()};
+
+$("#add").onclick=()=>{const page=fresh(nextId++);lists.unshift(page);save();render(page.id);window.scrollTo({top:0,behavior:"instant"})};
+loadRemote().catch(e=>statusText(" Chargement impossible : "+e.message));
+</script>
+
+
+
+</body></html>
